@@ -1,0 +1,1678 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1d5a52">
+<meta name="robots" content="noindex">
+<title>مسابقة المعتمرين</title>
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap">
+<style>
+/* ============ المتغيرات (اللون الرئيسي يُضبط من الإعدادات) ============ */
+:root{
+  --p:#2b7a70; --p-d:#1d5a52; --p-l:#e4f1ee; --p-xl:#f2f8f6;
+  --gold:#c8a850; --gold-d:#8f7424; --gold-l:#f8f1dc;
+  --bg:#f6f4ee; --card:#fff; --ink:#1c2b29; --muted:#5d6f6b; --line:#e3ded1;
+  --ok:#1f8a4c; --ok-l:#e3f4ea; --bad:#c0392b; --bad-l:#fbe9e7; --warn:#b7791f; --warn-l:#fdf3df;
+  --r:16px; --sh:0 2px 12px rgba(30,60,55,.09);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Tajawal',system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;font-size:17px;line-height:1.7;min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3{margin:0 0 .5em;line-height:1.4}
+h1{font-size:1.6rem} h2{font-size:1.3rem} h3{font-size:1.1rem}
+p{margin:.4em 0}
+a{color:var(--p)}
+.muted{color:var(--muted)} .small{font-size:.88rem} .center{text-align:center} .bold{font-weight:700}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap} .grow{flex:1;min-width:0} .sp{justify-content:space-between}
+.mt{margin-top:14px} .mb{margin-bottom:14px} .hide{display:none!important}
+.num{direction:ltr;unicode-bidi:isolate;font-variant-numeric:tabular-nums}
+
+/* ============ الترويسة بزخرفة هندسية ============ */
+.top{position:relative;background:linear-gradient(135deg,var(--p-d),var(--p));color:#fff;padding:12px 16px;border-bottom:4px solid var(--gold);overflow:hidden}
+.top::before{content:"";position:absolute;inset:0;opacity:.5;pointer-events:none;
+  background-image:linear-gradient(45deg,rgba(255,255,255,.08) 25%,transparent 25%),linear-gradient(-45deg,rgba(255,255,255,.08) 25%,transparent 25%),
+  linear-gradient(45deg,transparent 75%,rgba(255,255,255,.08) 75%),linear-gradient(-45deg,transparent 75%,rgba(255,255,255,.08) 75%);
+  background-size:30px 30px;background-position:0 0,0 15px,15px -15px,-15px 0}
+.top .in{position:relative;display:flex;align-items:center;flex-wrap:wrap;gap:10px 12px;max-width:1100px;margin:0 auto}
+.top .grow{min-width:150px}
+.top img{width:48px;height:48px;border-radius:12px;background:#fff;object-fit:contain;padding:3px;flex:none}
+.top .name{font-weight:800;font-size:1.2rem;line-height:1.3}
+.top .sub{font-size:.8rem;opacity:.85}
+.star{display:inline-block;position:relative;width:14px;height:14px;margin:0 6px;vertical-align:middle}
+.star::before,.star::after{content:"";position:absolute;inset:0;border:2px solid var(--gold);transform:rotate(0)}
+.star::after{transform:rotate(45deg)}
+.orn{display:flex;align-items:center;gap:8px;justify-content:center;color:var(--gold-d);margin:10px 0}
+.orn::before,.orn::after{content:"";height:2px;flex:1;max-width:80px;background:linear-gradient(90deg,transparent,var(--gold))}
+.orn::after{background:linear-gradient(270deg,transparent,var(--gold))}
+
+/* ============ الصفحات والبطاقات ============ */
+.wrap{max-width:520px;margin:0 auto;padding:16px 14px 40px}
+.wide{max-width:1100px}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:18px;margin-bottom:14px;border:1px solid var(--line)}
+.card.gold{border-color:var(--gold);background:linear-gradient(180deg,var(--gold-l),#fff 60%)}
+.hero{text-align:center;padding:22px 16px}
+.hero img{width:150px;height:150px;object-fit:contain;margin:0 auto 6px;display:block}
+
+/* ============ الأزرار والحقول ============ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:10px 22px;border:0;border-radius:14px;background:var(--p);color:#fff;font-weight:700;font-size:1.05rem;cursor:pointer;transition:transform .08s,opacity .2s,background .2s;text-decoration:none}
+.btn:active{transform:scale(.97)} .btn:hover{background:var(--p-d)}
+.btn.block{display:flex;width:100%}
+.btn.gold{background:var(--gold);color:#3a2e07} .btn.gold:hover{background:#b8982f}
+.btn.ghost{background:#fff;color:var(--p);border:2px solid var(--p)} .btn.ghost:hover{background:var(--p-l)}
+.btn.danger{background:var(--bad)} .btn.danger:hover{background:#9e2e22}
+.btn.sm{min-height:38px;padding:4px 14px;font-size:.92rem;border-radius:10px}
+.btn[disabled],.btn.busy{opacity:.55;pointer-events:none}
+.btn.busy::after{content:"";width:16px;height:16px;border:3px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.field{margin-bottom:14px} .field>label{display:block;font-weight:700;margin-bottom:4px;font-size:.95rem}
+.input,select.input,textarea.input{width:100%;min-height:52px;padding:10px 14px;border:2px solid var(--line);border-radius:12px;background:#fff;font-size:1.1rem;outline:0;transition:border .15s}
+textarea.input{min-height:90px;resize:vertical}
+.input:focus{border-color:var(--p);box-shadow:0 0 0 3px var(--p-l)}
+.input.ltr{direction:ltr;text-align:left}
+.hint{font-size:.85rem;color:var(--muted);margin-top:3px}
+.seg{display:flex;gap:8px} .seg label{flex:1}
+.seg input{position:absolute;opacity:0}
+.seg span{display:flex;align-items:center;justify-content:center;min-height:52px;border:2px solid var(--line);border-radius:12px;font-weight:700;cursor:pointer;background:#fff}
+.seg input:checked+span{border-color:var(--p);background:var(--p-l);color:var(--p-d)}
+.switch{display:flex;align-items:center;gap:10px;cursor:pointer;min-height:44px}
+.switch input{width:22px;height:22px;accent-color:var(--p)}
+.alert{padding:12px 14px;border-radius:12px;margin:10px 0;font-size:.97rem;border:1px solid transparent}
+.alert.err{background:var(--bad-l);color:#7d2218;border-color:#f1c3bd} .alert.ok{background:var(--ok-l);color:#14552f;border-color:#bfe3cd}
+.alert.warn{background:var(--warn-l);color:#6b4710;border-color:#f0d9a6} .alert.info{background:var(--p-l);color:var(--p-d);border-color:#c5e0da}
+.chip{display:inline-block;padding:2px 12px;border-radius:99px;font-size:.82rem;font-weight:700;background:var(--p-l);color:var(--p-d)}
+.chip.gold{background:var(--gold-l);color:var(--gold-d)} .chip.bad{background:var(--bad-l);color:var(--bad)} .chip.ok{background:var(--ok-l);color:var(--ok)} .chip.gray{background:#eceae3;color:var(--muted)}
+.demo-bar{background:#fff3cd;color:#664d03;text-align:center;font-size:.85rem;padding:6px 10px;border-bottom:1px solid #ecd791}
+.test-bar{background:#fde2dd;color:#7d2218;text-align:center;font-size:.85rem;padding:6px 10px;border-bottom:1px solid #f1c3bd;font-weight:700}
+
+/* ============ شاشة السؤال ============ */
+.prog{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-weight:700;color:var(--p-d)}
+.bar{flex:1;height:8px;background:#e6e2d6;border-radius:9px;overflow:hidden} .bar>i{display:block;height:100%;background:var(--p);border-radius:9px;transition:width .4s}
+.timer{margin:6px 0 16px}
+.timer .bar{height:14px;background:#e6e2d6} .timer .bar>i{background:linear-gradient(90deg,var(--gold),var(--p));transition:width .15s linear}
+.timer.low .bar>i{background:var(--bad)} .timer .secs{font-size:1.5rem;font-weight:800;color:var(--p-d);min-width:2.2em;text-align:center}
+.timer.low .secs{color:var(--bad);animation:pulse .6s infinite alternate}
+@keyframes pulse{to{transform:scale(1.18)}}
+.qcat{margin-bottom:6px}
+.qtext{font-size:1.4rem;font-weight:800;line-height:1.8;margin:6px 0 18px}
+.opts{display:grid;gap:12px}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:right;min-height:60px;padding:14px 16px;border:2px solid var(--line);background:#fff;border-radius:14px;font-size:1.15rem;font-weight:500;cursor:pointer;transition:transform .08s,border .15s,background .15s}
+.opt:active{transform:scale(.98)} .opt .k{flex:none;width:34px;height:34px;border-radius:50%;background:var(--p-l);color:var(--p-d);display:grid;place-items:center;font-weight:800;font-size:.95rem}
+.opt.sel{border-color:var(--p);background:var(--p-l)} .opt.sel .k{background:var(--p);color:#fff}
+.opt.ok{border-color:var(--ok);background:var(--ok-l)} .opt.ok .k{background:var(--ok);color:#fff}
+.opt.bad{border-color:var(--bad);background:var(--bad-l)} .opt.bad .k{background:var(--bad);color:#fff}
+.opts.locked .opt{pointer-events:none} .opts.locked .opt:not(.sel):not(.ok):not(.bad){opacity:.55}
+.ack{text-align:center;padding:26px 10px;font-size:1.2rem;font-weight:800;color:var(--ok)}
+.ack .tick{display:grid;place-items:center;width:64px;height:64px;margin:0 auto 10px;border-radius:50%;background:var(--ok);color:#fff;font-size:2rem;animation:pop .35s}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+.getready{text-align:center;padding:30px 0;font-size:1.3rem;font-weight:800;color:var(--p-d)}
+.netwarn{position:sticky;top:0;z-index:5;background:var(--warn-l);color:#6b4710;text-align:center;padding:8px;font-weight:700;border-bottom:1px solid #f0d9a6}
+
+/* ============ النتائج والمتصدرون ============ */
+.bigstat{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.bigstat>div{background:var(--p-xl);border-radius:12px;padding:10px 4px;border:1px solid var(--line)}
+.bigstat b{display:block;font-size:1.7rem;color:var(--p-d);line-height:1.2} .bigstat span{font-size:.82rem;color:var(--muted)}
+.lb{list-style:none;margin:0;padding:0} .lb li{display:flex;align-items:center;gap:10px;padding:10px 8px;border-bottom:1px solid var(--line)}
+.lb li.me{background:var(--gold-l);border-radius:10px;border:2px solid var(--gold);font-weight:800}
+.lb .rk{flex:none;width:36px;height:36px;border-radius:50%;background:var(--p-l);display:grid;place-items:center;font-weight:800;color:var(--p-d)}
+.lb li:nth-child(1) .rk{background:var(--gold);color:#3a2e07} .lb .pt{font-weight:800;color:var(--p-d)}
+.rev{border-right:5px solid var(--line);padding:8px 12px;margin-bottom:10px;background:#fff;border-radius:10px}
+.rev.ok{border-color:var(--ok)} .rev.bad{border-color:var(--bad)}
+.rev .a{font-size:.95rem} .rev .e{font-size:.9rem;color:var(--muted);background:var(--p-xl);border-radius:8px;padding:6px 10px;margin-top:6px}
+
+/* ============ لوحة المشرف ============ */
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:10px 12px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;-webkit-overflow-scrolling:touch}
+.tabs a{flex:none;padding:8px 16px;border-radius:99px;text-decoration:none;font-weight:700;color:var(--muted);background:#f0eee6}
+.tabs a.on{background:var(--p);color:#fff}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center;box-shadow:var(--sh)}
+.stat b{display:block;font-size:2rem;color:var(--p-d);line-height:1.2} .stat span{font-size:.85rem;color:var(--muted)}
+.tblw{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:#fff}
+table.tbl{border-collapse:collapse;width:100%;font-size:.95rem;min-width:560px}
+.tbl th{background:var(--p-l);color:var(--p-d);text-align:right;padding:9px 10px;white-space:nowrap;position:sticky;top:0}
+.tbl td{padding:8px 10px;border-top:1px solid var(--line);vertical-align:middle} .tbl tr:hover td{background:var(--p-xl)}
+.tbl td.act{white-space:nowrap;text-align:left}
+.pbar{height:10px;border-radius:9px;background:#e6e2d6;overflow:hidden;min-width:80px} .pbar>i{display:block;height:100%;background:var(--p)} .pbar.low>i{background:var(--bad)} .pbar.mid>i{background:var(--warn)}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.toolbar .input{width:auto;min-height:42px;font-size:1rem;padding:6px 12px}
+.qcard{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;background:#fff}
+.qcard.off{opacity:.6;background:#f3f1ea}
+.qcard ol{margin:6px 0 0;padding-inline-start:22px} .qcard li.right{color:var(--ok);font-weight:800}
+.optrow{display:flex;gap:8px;align-items:center;margin-bottom:8px} .optrow input[type=radio]{width:22px;height:22px;accent-color:var(--ok);flex:none}
+.stepper{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap} .stepper span{padding:4px 12px;border-radius:99px;background:#eceae3;color:var(--muted);font-weight:700;font-size:.9rem} .stepper span.on{background:var(--p);color:#fff}
+.qrbox{display:grid;place-items:center;padding:10px;background:#fff;border-radius:12px;border:1px solid var(--line);width:210px;height:210px;margin:0 auto} .qrbox svg{width:100%;height:100%}
+.linkbox{direction:ltr;text-align:left;background:var(--p-xl);border:1px dashed var(--p);border-radius:10px;padding:8px 10px;word-break:break-all;font-size:.9rem}
+.statelabel{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:99px;font-weight:800}
+.statelabel::before{content:"";width:10px;height:10px;border-radius:50%;background:currentColor}
+.st-draft{background:#eceae3;color:var(--muted)} .st-scheduled{background:var(--warn-l);color:var(--warn)} .st-open{background:var(--ok-l);color:var(--ok)} .st-closed{background:var(--bad-l);color:var(--bad)} .st-published{background:var(--gold-l);color:var(--gold-d)}
+
+/* ============ النوافذ والإشعارات ============ */
+.ov{position:fixed;inset:0;background:rgba(15,35,32,.55);display:grid;place-items:center;padding:16px;z-index:100;animation:fade .15s}
+.dlg{background:#fff;border-radius:18px;padding:20px;width:100%;max-width:460px;max-height:90vh;overflow:auto;box-shadow:0 10px 40px rgba(0,0,0,.3)}
+.dlg.big{max-width:760px}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+#toasts{position:fixed;bottom:14px;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:8px;z-index:200;pointer-events:none;padding:0 14px}
+.toast{background:#1c2b29;color:#fff;padding:10px 18px;border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,.25);animation:fade .2s;max-width:420px;text-align:center}
+.toast.err{background:var(--bad)} .toast.ok{background:var(--ok)}
+.loading{display:grid;place-items:center;padding:50px 0;color:var(--muted)} .loading::before{content:"";width:34px;height:34px;border:4px solid var(--p-l);border-top-color:var(--p);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:10px}
+
+/* ============ إعلان الفائزين (ملء الشاشة) ============ */
+.win{position:fixed;inset:0;z-index:150;overflow:auto;color:#fff;text-align:center;padding:20px 14px 40px;
+  background:radial-gradient(circle at 50% 0%,#2f8a7e 0%,var(--p-d) 55%,#10332e 100%)}
+.win::before{content:"";position:fixed;inset:0;opacity:.18;pointer-events:none;
+  background-image:linear-gradient(45deg,#fff 25%,transparent 25%),linear-gradient(-45deg,#fff 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#fff 75%),linear-gradient(-45deg,transparent 75%,#fff 75%);
+  background-size:44px 44px;background-position:0 0,0 22px,22px -22px,-22px 0}
+.win>*{position:relative}
+.win h1{font-size:2.4rem;color:var(--gold);margin:6px 0 2px} .win .cn{opacity:.9;margin-bottom:10px}
+.win .x{position:fixed;top:12px;left:12px;z-index:3;background:rgba(255,255,255,.18);color:#fff;border:0;border-radius:50%;width:44px;height:44px;font-size:1.3rem;cursor:pointer}
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:10px;max-width:760px;margin:26px auto 10px;direction:ltr}
+.podium .slot{flex:1;max-width:240px;display:flex;flex-direction:column;align-items:center;direction:rtl}
+.podium .who{opacity:0;animation:fade .6s forwards;margin-bottom:8px;padding:0 4px;word-break:break-word}
+.podium .who b{display:block;font-size:1.35rem;line-height:1.4} .podium .who span{font-size:.95rem;opacity:.9}
+.podium .blk{width:100%;border-radius:14px 14px 0 0;display:flex;align-items:flex-start;justify-content:center;padding-top:10px;font-size:2.6rem;font-weight:800;transform-origin:bottom;transform:scaleY(0);animation:rise .9s cubic-bezier(.2,.8,.2,1) forwards;color:#3a2e07}
+.podium .s1 .blk{height:230px;background:linear-gradient(180deg,#f1d77a,var(--gold));animation-delay:1.6s} .podium .s1 .who{animation-delay:2.4s}
+.podium .s2 .blk{height:170px;background:linear-gradient(180deg,#e9edf0,#aab4bb);animation-delay:.8s} .podium .s2 .who{animation-delay:1.6s}
+.podium .s3 .blk{height:120px;background:linear-gradient(180deg,#e0b48a,#b27a49);animation-delay:0s} .podium .s3 .who{animation-delay:.9s}
+@keyframes rise{to{transform:scaleY(1)}}
+.win .grp{margin-top:26px} .win .grp h2{color:var(--gold);font-size:1.6rem}
+
+/* ============ الطباعة ============ */
+@media print{
+  body{background:#fff;font-size:12px} .noprint,.tabs,.top,.demo-bar,.test-bar,#toasts{display:none!important}
+  .wrap{max-width:none;padding:0} .card{box-shadow:none;border:0;padding:0} .tblw{border:0;overflow:visible} table.tbl{min-width:0}
+  .tbl th{position:static}
+}
+.hide-screen{display:none} @media print{.hide-screen{display:block;margin-bottom:8px}}
+@media (min-width:700px){ body{font-size:18px} .opts.two{grid-template-columns:1fr 1fr} }
+</style>
+</head>
+<body>
+<div id="app"><div class="loading">جارٍ التحميل…</div></div>
+<div id="toasts" aria-live="polite"></div>
+<script type="module">
+/* =====================================================================
+   مسابقة المعتمرين — تطبيق ويب ثابت (HTML + CSS + JS خالص)
+   ===================================================================== */
+
+/* ============================== CONFIG ==============================
+   ضع هنا Project URL و anon public key من: Supabase ← Project Settings ← API
+   ⚠️ لا تضع أبداً مفتاح service_role هنا. الـ anon key مصمم ليكون علنياً
+   والحماية الفعلية تأتي من RLS والدوال في schema.sql.
+   إذا تُركا فارغين يعمل التطبيق في «الوضع التجريبي» ببيانات محلية.
+   ==================================================================== */
+const CONFIG = {
+  SUPABASE_URL: 'https://zptyrjeeeteinqfflwxk.supabase.co',
+  SUPABASE_ANON_KEY: 'sb_publishable_v5y4yAPWxNNX05bu0jGy-g_jmiwWb4h',   // المفتاح العلني (publishable) — آمن للظهور في الصفحة
+  TIMEZONE: 'Asia/Riyadh', // توقيت عرض المواعيد (السعودية بدون توقيت صيفي: +03:00)
+};
+const DEMO = !(CONFIG.SUPABASE_URL && CONFIG.SUPABASE_ANON_KEY);
+const CDN = {
+  supabase: 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/+esm',
+  xlsx: 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.mini.min.js',
+  qr: 'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js',
+};
+
+/* ============================ أدوات DOM ============================ */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const PROPS = new Set(['value', 'checked', 'disabled', 'selected', 'indeterminate']);
+
+// إنشاء عناصر بأمان (بدون innerHTML) — النصوص تُدرج كنص فقط
+function h(tag, props, ...kids) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(props || {})) {
+    if (v == null || v === false) continue;
+    if (k === 'class') el.className = v;
+    else if (k === 'style' && typeof v === 'object') Object.assign(el.style, v);
+    else if (k.startsWith('on') && typeof v === 'function') el.addEventListener(k.slice(2).toLowerCase(), v);
+    else if (PROPS.has(k)) el[k] = v;
+    else el.setAttribute(k, v === true ? '' : v);
+  }
+  for (const c of kids.flat(Infinity)) {
+    if (c == null || c === false) continue;
+    el.append(c.nodeType ? c : document.createTextNode(String(c)));
+  }
+  return el;
+}
+const mount = (root, ...kids) => { root.replaceChildren(...kids.flat(Infinity).filter(Boolean)); return root; };
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const clamp = (n, a, b) => Math.min(b, Math.max(a, n));
+
+/* ============================ التخزين المحلي ============================ */
+const store = {
+  get(k, d = null) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* ممتلئ أو ممنوع */ } },
+  del(k) { try { localStorage.removeItem(k); } catch { /* */ } },
+};
+
+/* ============================ الأرقام والجوال ============================ */
+const AR_DIGITS = '٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹';
+const toLatinDigits = s => String(s ?? '').replace(/[٠-٩۰-۹]/g, c => String(AR_DIGITS.indexOf(c) % 10));
+
+// نفس قواعد دالة normalize_phone في قاعدة البيانات تماماً (الخادم هو المرجع)
+function normalizePhone(raw) {
+  const s = toLatinDigits(raw);
+  let d = s.replace(/[^0-9]/g, '');
+  if (!d) return null;
+  let intl = false;
+  if (/^[^0-9]*\+/.test(s)) intl = true;
+  else if (d.startsWith('00')) { intl = true; d = d.slice(2); }
+  if (intl) {
+    if (d.startsWith('9660')) d = '966' + d.slice(4);
+    if (d.startsWith('966')) return /^9665[0-9]{8}$/.test(d) ? '+' + d : null;
+    return /^[1-9][0-9]{7,14}$/.test(d) ? '+' + d : null;
+  }
+  if (/^05[0-9]{8}$/.test(d)) return '+966' + d.slice(1);
+  if (/^5[0-9]{8}$/.test(d)) return '+966' + d;
+  if (/^9665[0-9]{8}$/.test(d)) return '+' + d;
+  if (/^[1-9][0-9]{10,14}$/.test(d)) return '+' + d;
+  return null;
+}
+const phoneShow = p => (p && /^\+9665\d{8}$/.test(p)) ? '0' + p.slice(4) : (p || '');
+const PHONE_HELP = 'رقم الجوال غير صحيح. اكتب رقماً سعودياً مثل 0501234567 أو رقماً دولياً يبدأ بـ +';
+
+function parseGender(v) {
+  const s = toLatinDigits(v).trim().toLowerCase();
+  if (['m', 'male', 'man', 'ذكر', 'رجل', 'رجال', 'ذ'].includes(s)) return 'M';
+  if (['f', 'female', 'woman', 'أنثى', 'انثى', 'امرأة', 'امراة', 'نساء'].includes(s)) return 'F';
+  return null;
+}
+const genderLabel = g => g === 'M' ? 'رجل' : g === 'F' ? 'امرأة' : '';
+const busLabel = n => n == null || n === '' ? 'بدون باص' : /^\d+$/.test(String(n)) ? 'باص ' + n : String(n);
+const CATS = { fiqh: 'فقهي', culture: 'ثقافي', other: 'أخرى' };
+
+/* ============================ التنسيق ============================ */
+const nf = new Intl.NumberFormat('en-US');
+const fmtN = n => nf.format(Math.round(n ?? 0));
+const fmtSec = ms => (ms / 1000).toFixed(1) + ' ث';
+function fmtDur(ms) {
+  const s = Math.round((ms ?? 0) / 1000), m = Math.floor(s / 60);
+  return m ? `${m}:${String(s % 60).padStart(2, '0')} د` : `${s} ث`;
+}
+const dtf = new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', { dateStyle: 'medium', timeStyle: 'short', timeZone: CONFIG.TIMEZONE });
+const fmtDate = iso => iso ? dtf.format(new Date(iso)) : '—';
+// قيمة حقل datetime-local ↔ ISO (بتوقيت السعودية الثابت +03:00)
+const toLocalInput = iso => iso ? new Date(iso).toLocaleString('sv-SE', { timeZone: CONFIG.TIMEZONE }).replace(' ', 'T').slice(0, 16) : '';
+const fromLocalInput = v => v ? new Date(v + ':00+03:00').toISOString() : null;
+
+/* ============================ الألوان (ثيم) ============================ */
+function hexToHsl(hex) {
+  const n = parseInt(hex.slice(1), 16), r = (n >> 16) / 255, g = ((n >> 8) & 255) / 255, b = (n & 255) / 255;
+  const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2; let hh = 0, s = 0;
+  if (mx !== mn) {
+    const d = mx - mn; s = l > .5 ? d / (2 - mx - mn) : d / (mx + mn);
+    hh = mx === r ? (g - b) / d + (g < b ? 6 : 0) : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; hh *= 60;
+  }
+  return [hh, s * 100, l * 100];
+}
+const hsl = (h2, s, l) => `hsl(${h2.toFixed(0)} ${s.toFixed(0)}% ${clamp(l, 0, 100).toFixed(0)}%)`;
+function applyTheme(cfg) {
+  const root = document.documentElement.style;
+  const c = /^#[0-9a-f]{6}$/i.test(cfg.primary_color) ? cfg.primary_color : '#2b7a70';
+  const [hh, s, l] = hexToHsl(c);
+  root.setProperty('--p', c);
+  root.setProperty('--p-d', hsl(hh, s, Math.min(l, 45) * .72));
+  root.setProperty('--p-l', hsl(hh, Math.min(s, 40), 93));
+  root.setProperty('--p-xl', hsl(hh, Math.min(s, 35), 96.5));
+  const tc = document.querySelector('meta[name=theme-color]'); if (tc) tc.content = hsl(hh, s, Math.min(l, 45) * .72);
+  document.title = `${cfg.campaign_name} — مسابقة المعتمرين`;
+}
+
+/* ============================ الإشعارات والنوافذ ============================ */
+function toast(msg, kind = '') {
+  const box = $('#toasts');
+  [...box.children].forEach(x => { if (x.textContent === msg) x.remove(); });          // لا نكرر نفس الرسالة
+  while (box.children.length >= 3) box.firstChild.remove();                              // حد أقصى 3 رسائل ظاهرة
+  const t = h('div', { class: 'toast ' + kind }, msg);
+  box.append(t); setTimeout(() => t.remove(), kind === 'err' ? 5000 : 3000);
+}
+function modal(content, { big = false, dismiss = true } = {}) {
+  const ov = h('div', { class: 'ov' });
+  const close = () => { ov.remove(); document.removeEventListener('keydown', esc); };
+  const esc = e => { if (e.key === 'Escape' && dismiss) close(); };
+  ov.append(h('div', { class: 'dlg' + (big ? ' big' : '') }, content));
+  if (dismiss) ov.addEventListener('mousedown', e => { if (e.target === ov) close(); });
+  document.addEventListener('keydown', esc); document.body.append(ov);
+  return { close, el: ov };
+}
+// نافذة تأكيد. requireText: اطلب كتابة كلمة للتأكيد (للإجراءات الخطرة)
+function confirmDlg({ title, text, ok = 'تأكيد', danger = false, requireText = null }) {
+  return new Promise(res => {
+    let m; const done = v => { m.close(); res(v); };
+    const inp = requireText ? h('input', { class: 'input', placeholder: `اكتب «${requireText}» للتأكيد`, oninput: () => (okBtn.disabled = inp.value.trim() !== requireText) }) : null;
+    const okBtn = h('button', { class: 'btn ' + (danger ? 'danger' : ''), disabled: !!requireText, onclick: () => done(true) }, ok);
+    m = modal([h('h3', null, title), h('p', null, text), inp,
+      h('div', { class: 'row mt' }, okBtn, h('button', { class: 'btn ghost', onclick: () => done(false) }, 'إلغاء'))], { dismiss: false });
+    if (inp) inp.focus();
+  });
+}
+// تشغيل دالة غير متزامنة مع منع الضغط المزدوج وإظهار حالة التحميل
+async function busy(btn, fn) {
+  if (btn.classList.contains('busy')) return;
+  btn.classList.add('busy');
+  try { return await fn(); } finally { btn.classList.remove('busy'); }
+}
+const btnAct = (label, cls, fn) => { const b = h('button', { class: 'btn ' + cls }, label); b.onclick = () => busy(b, () => fn(b)); return b; };
+const errMsg = e => (e && e.message) || 'حدث خطأ غير متوقع';
+const wrapFail = fn => async (...a) => { try { return await fn(...a); } catch (e) { toast(errMsg(e), 'err'); } };
+
+function download(name, blobOrText, type = 'text/plain;charset=utf-8') {
+  const blob = blobOrText instanceof Blob ? blobOrText : new Blob([blobOrText], { type });
+  const a = h('a', { href: URL.createObjectURL(blob), download: name }); document.body.append(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+}
+async function copyText(t) {
+  try { await navigator.clipboard.writeText(t); }
+  catch { const x = h('textarea', { value: t, style: { position: 'fixed', opacity: 0 } }); document.body.append(x); x.select(); document.execCommand('copy'); x.remove(); }
+  toast('تم النسخ', 'ok');
+}
+const scripts = {};
+const loadScript = url => scripts[url] ||= new Promise((ok, no) => {
+  const s = h('script', { src: url }); s.onload = ok; s.onerror = () => { delete scripts[url]; no(new Error('تعذّر تحميل مكتبة من الإنترنت')); }; document.head.append(s);
+});
+const loadXLSX = async () => { await loadScript(CDN.xlsx); return window.XLSX; };
+const loadQR = async () => { await loadScript(CDN.qr); return window.qrcode; };
+const contestUrl = () => location.origin + location.pathname;
+
+/* ============================ طبقة الاتصال (Supabase أو محلي) ============================ */
+class ApiError extends Error { constructor(m, code) { super(m); this.code = code; } }
+let backend = null, sb = null;
+
+async function initBackend() {
+  if (DEMO) { backend = createLocalBackend(); return; }
+  const { createClient } = await import(CDN.supabase);
+  sb = createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY, {
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false },
+  });
+  backend = { rpc: (n, p) => sb.rpc(n, p) };
+}
+async function rpc(name, params = {}) {
+  let res;
+  try { res = await backend.rpc(name, params); }
+  catch { throw new ApiError('تعذّر الاتصال بالخادم. تحقق من الإنترنت', 'network'); }
+  const { data, error } = res;
+  if (error) {
+    const m = String(error.message || '');
+    if (!navigator.onLine || /failed to fetch|networkerror|load failed|network request|timeout|abort|fetch/i.test(m) && !/[؀-ۿ]/.test(m))
+      throw new ApiError('انقطع الاتصال بالإنترنت', 'network');
+    if (error.code === '42501' || /permission denied|jwt/i.test(m)) throw new ApiError('غير مصرّح لك بهذه العملية. سجّل الدخول كمشرف', 'auth');
+    throw new ApiError(/[؀-ۿ]/.test(m) ? m : 'حدث خطأ غير متوقع، حاول مرة أخرى', 'rpc');
+  }
+  return data;
+}
+// إعادة المحاولة عند انقطاع الشبكة فقط (لا تُعاد أخطاء الخادم). shouldContinue تُوقف الحلقة.
+async function rpcRetry(name, params, { onRetry, shouldContinue = () => true } = {}) {
+  for (let i = 0; ; i++) {
+    try { return await rpc(name, params); }
+    catch (e) {
+      if (e.code !== 'network' || !shouldContinue()) throw e;
+      onRetry?.(i + 1);
+      await sleep(Math.min(1000 + i * 700, 4000));
+    }
+  }
+}
+const adminAuth = {
+  async user() {
+    if (DEMO) return { email: 'demo@local' };
+    const { data } = await sb.auth.getSession(); return data.session?.user ?? null;
+  },
+  async signIn(email, password) {
+    if (DEMO) return;
+    const { error } = await sb.auth.signInWithPassword({ email: email.trim().toLowerCase(), password });
+    if (error) throw new ApiError(/fetch|network/i.test(error.message) ? 'تعذّر الاتصال بالخادم' : 'البريد أو كلمة المرور غير صحيحة', 'auth');
+  },
+  async signOut() { if (!DEMO) await sb.auth.signOut(); },
+};
+
+/* ============================ الإعدادات العامة ============================ */
+let CFG = null;
+async function loadConfig() {
+  const cache = store.get('kq_logo');
+  const cfg = await rpc('get_public_config', { p_logo_version: cache?.v ?? null });
+  if (cfg.logo) store.set('kq_logo', { v: cfg.logo_version, logo: cfg.logo });
+  else if (cfg.has_logo && cache?.v === cfg.logo_version) cfg.logo = cache.logo;
+  if (!cfg.has_logo) store.del('kq_logo');
+  cfg.logo = cfg.logo || 'logo.png';
+  cfg.skew = Date.parse(cfg.server_now) - Date.now();      // فرق ساعة الجهاز عن الخادم
+  CFG = cfg; applyTheme(cfg); return cfg;
+}
+const serverNow = () => Date.now() + (CFG?.skew || 0);
+function brandHeader(extra) {
+  return h('header', { class: 'top' }, h('div', { class: 'in' },
+    h('img', { src: CFG.logo, alt: 'شعار الحملة' }),
+    h('div', { class: 'grow' }, h('div', { class: 'name' }, CFG.campaign_name), h('div', { class: 'sub' }, 'مسابقة المعتمرين')), extra));
+}
+function modeBars() {
+  return [DEMO && h('div', { class: 'demo-bar' }, '⚠️ وضع تجريبي: البيانات محلية في هذا المتصفح فقط (لمعاينة الواجهة). اضبط Supabase في قسم CONFIG للتشغيل الفعلي.'),
+    CFG?.test_mode && h('div', { class: 'test-bar' }, '🧪 وضع التجربة مفعّل — أي مشاركة الآن تُعدّ تجريبية وتُحذف قبل الإطلاق')];
+}
+// عدّ تنازلي لموعد (يعمل بوقت الخادم). يُعيد دالة الإيقاف
+function countdown(node, iso, onDone) {
+  const t = Date.parse(iso); let id;
+  const tick = () => {
+    const s = Math.max(0, Math.ceil((t - serverNow()) / 1000));
+    const d = Math.floor(s / 86400), hh = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60), ss = s % 60;
+    node.textContent = (d ? `${d} يوم ` : '') + [hh, m, ss].map(x => String(x).padStart(2, '0')).join(':');
+    if (s <= 0) { clearInterval(id); onDone?.(); }
+  };
+  tick(); id = setInterval(tick, 1000); return () => clearInterval(id);
+}
+
+/* =====================================================================
+   الوضع التجريبي: خادم محلي (localStorage) يحاكي دوال schema.sql نفسها
+   لمعاينة الواجهة فقط — لا أمان فيه ولا يُستعمل في التشغيل الفعلي.
+   ===================================================================== */
+function createLocalBackend() {
+  const KEY = 'kq_demo_db_v1';
+  const uid = () => crypto.randomUUID ? crypto.randomUUID() : 'id' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+  const shuffle = a => { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const iso = t => t ? new Date(t).toISOString() : null;
+  const err = (error, message) => ({ ok: false, error, message });
+  const fail = m => { throw new Error(m); };
+  const cleanName = s => String(s ?? '').trim().replace(/\s+/g, ' ');
+
+  const SEED_Q = [
+    ['ما ميقات أهل المدينة المنورة؟', 'fiqh', ['الجحفة', 'ذو الحليفة', 'يلملم', 'قرن المنازل'], 1, 'ميقات أهل المدينة ومن مرّ بها هو ذو الحليفة، ويُعرف اليوم بأبيار علي، وهو أبعد المواقيت عن مكة.'],
+    ['كم عدد أشواط الطواف حول الكعبة؟', 'fiqh', ['خمسة', 'سبعة', 'ثلاثة', 'تسعة'], 1, 'الطواف سبعة أشواط، يبدأ من الحجر الأسود وينتهي عنده، وتكون الكعبة عن يسار الطائف.'],
+    ['من أين يبدأ السعي وأين ينتهي؟', 'fiqh', ['يبدأ من المروة وينتهي بالصفا', 'يبدأ من الصفا وينتهي بالصفا', 'يبدأ من الصفا وينتهي بالمروة', 'يبدأ من المروة وينتهي بالمروة'], 2, 'السعي سبعة أشواط يبدأ بالصفا وينتهي بالمروة؛ فالذهاب من الصفا إلى المروة شوط، والرجوع منها إلى الصفا شوط آخر.'],
+    ['أي مما يلي ليس من محظورات الإحرام؟', 'fiqh', ['لبس المخيط للرجل', 'تغطية الرأس للرجل', 'قصّ الأظافر', 'الاغتسال بالماء'], 3, 'الاغتسال وتنظيف البدن مباح للمحرم، أما لبس المخيط للرجل وتغطية رأسه وقصّ الأظافر والشعر فمن محظورات الإحرام.'],
+    ['ما الذي يفعله المعتمر بعد السعي ليتحلل من إحرامه؟', 'fiqh', ['يبيت بمزدلفة', 'يرمي الجمرات', 'يقف بعرفة', 'يحلق رأسه أو يقصّره'], 3, 'بعد السعي يحلق الرجل رأسه أو يقصّره، وتقصّر المرأة قدر أنملة من أطراف شعرها، فيتحلل المعتمر وتنتهي عمرته.'],
+    ['لمن نبعت بئر زمزم بأمر الله تعالى؟', 'culture', ['لإبراهيم وسارة عليهما السلام', 'لهاجر وابنها إسماعيل عليهما السلام', 'لآدم وحواء عليهما السلام', 'لنوح وابنه عليهما السلام'], 1, 'نبعت زمزم حين تُركت هاجر وابنها الرضيع إسماعيل عليهما السلام في وادٍ غير ذي زرع، فجعلها الله سقيا لهما ولمن بعدهما.'],
+    ['في أي جبل يقع غار حراء الذي نزل فيه أول الوحي؟', 'culture', ['جبل ثور', 'جبل أبي قبيس', 'جبل النور', 'جبل أحد'], 2, 'غار حراء في جبل النور بمكة المكرمة، وفيه نزل جبريل عليه السلام على النبي ﷺ بأول آيات القرآن.'],
+    ['في أي سنة هجرية كان فتح مكة؟', 'culture', ['السنة السادسة', 'السنة السابعة', 'السنة الثامنة', 'السنة العاشرة'], 2, 'كان فتح مكة في رمضان من السنة الثامنة للهجرة، ودخلها النبي ﷺ فاتحاً وعفا عن أهلها.'],
+  ];
+  const seed = () => {
+    const d = {
+      settings: { campaign_name: 'حملة الخلف', logo_data: null, logo_version: 0, primary_color: '#2b7a70', status: 'draft', results_published: false,
+        starts_at: null, ends_at: null, closed_at: null, self_register: true, show_score: true, show_correct: false, leaderboard_size: 10,
+        base_points: 100, speed_bonus: 50, default_seconds: 20, questions_per_attempt: null, test_mode: false },
+      buses: [{ id: 1, name: '1' }, { id: 2, name: '2' }], nextBus: 3, participants: [], questions: [], attempts: [],
+    };
+    SEED_Q.forEach(([text, category, opts, ci, explanation]) => {
+      const options = opts.map(t => ({ id: uid(), text: t }));
+      d.questions.push({ id: uid(), text, category, explanation, points: null, seconds: null, active: true, created_at: Date.now(), options, correct_option_id: options[ci].id });
+    });
+    [['أحمد الخلف', '0500000001', 'M', 1], ['سارة محمد', '0500000002', 'F', 1], ['خالد العلي', '0500000003', 'M', 2], ['نورة السالم', '0500000004', 'F', 2], ['فهد الراشد', '0500000005', 'M', 1], ['ليلى حسن', '0500000006', 'F', 2]]
+      .forEach(([name, ph, gender, bus_id]) => d.participants.push({ id: uid(), phone: normalizePhone(ph), name, gender, bus_id, source: 'import', is_test: false, created_at: Date.now() }));
+    return d;
+  };
+  let db = store.get(KEY) || seed();
+  const save = () => store.set(KEY, db);
+  const S = () => db.settings;
+
+  /* ---------- الحالة والمحرك (مرآة لدوال SQL) ---------- */
+  function state() {
+    const s = S(), now = Date.now(), closed = s.results_published ? 'published' : 'closed';
+    if (s.status === 'draft') return 'draft';
+    if (s.status === 'closed') return closed;
+    if (s.ends_at && now >= s.ends_at) return closed;
+    if (s.starts_at && now < s.starts_at) return 'scheduled';
+    return 'open';
+  }
+  const canPlay = () => state() === 'open' || (S().test_mode && ['draft', 'scheduled'].includes(state()));
+  const part = id => db.participants.find(p => p.id === id);
+  const byPhone = ph => db.participants.find(p => p.phone === ph);
+  const attOf = p => db.attempts.find(a => a.participant_id === p.id);
+  const busName = id => db.buses.find(b => b.id === id)?.name ?? null;
+  const recalc = a => {
+    a.total_points = a.qs.reduce((s, q) => s + (q.points || 0), 0);
+    a.correct_count = a.qs.filter(q => q.is_correct).length;
+    a.total_ms = a.qs.reduce((s, q) => s + (['answered', 'timeout'].includes(q.status) ? (q.elapsed_ms ?? q.seconds * 1000) : 0), 0);
+  };
+  const finish = (a, at) => { if (!a.finished_at) { a.finished_at = Math.max(a.started_at, at); a.cur_idx = a.total_questions; } recalc(a); };
+  const timeout = q => Object.assign(q, { status: 'timeout', elapsed_ms: q.seconds * 1000, is_correct: false, points: 0 });
+  function advance(a) {
+    if (a.finished_at) return;
+    const s = S();
+    if (['closed', 'published'].includes(state())) {
+      const at = Math.min(Date.now(), (s.status === 'closed' ? s.closed_at : s.ends_at) ?? Date.now());
+      a.qs.forEach(q => { if (q.status === 'pending') timeout(q); }); finish(a, at); return;
+    }
+    for (;;) {
+      const q = a.qs[a.cur_idx];
+      if (!q) { finish(a, Date.now()); return; }
+      if (q.shown_at == null) { q.shown_at = Date.now(); break; }
+      const dl = q.shown_at + q.seconds * 1000;
+      if (Date.now() <= dl + 2000) break;
+      timeout(q); a.cur_idx++;
+      if (a.cur_idx >= a.total_questions) { finish(a, dl); return; }
+      a.qs[a.cur_idx].shown_at = dl;
+    }
+    recalc(a);
+  }
+  const sweep = () => db.attempts.forEach(advance);
+  function payload(a) {
+    const q = a.qs[a.cur_idx], Q = db.questions.find(x => x.id === q.question_id), now = Date.now();
+    return { idx: q.idx, total: a.total_questions, text: Q.text, category: Q.category, seconds: q.seconds,
+      starts_in_ms: Math.max(0, q.shown_at - now), remaining_ms: Math.max(0, q.shown_at + q.seconds * 1000 - now),
+      options: a.opts[q.question_id].map(o => ({ token: o.token, text: Q.options.find(x => x.id === o.option_id)?.text })) };
+  }
+  const summary = a => ({ total_questions: a.total_questions, show_score: S().show_score, points: S().show_score ? a.total_points : null });
+  const hasReal = qid => db.attempts.some(a => !a.is_test && a.qs.some(q => q.question_id === qid));
+  function ranking(all = false) {
+    const rows = db.attempts.filter(a => all || a.finished_at).map(a => {
+      const p = part(a.participant_id);
+      return { participant_id: p.id, name: p.name, phone: p.phone, gender: p.gender, bus_id: p.bus_id, bus_name: busName(p.bus_id), points: a.total_points,
+        correct_count: a.correct_count, total_ms: a.total_ms, finished_at: a.finished_at, resume_count: a.resume_count, is_test: a.is_test, status: a.finished_at ? 'finished' : 'in_progress' };
+    });
+    const cmp = (x, y) => y.points - x.points || x.total_ms - y.total_ms || (x.finished_at ?? Infinity) - (y.finished_at ?? Infinity);
+    rows.sort(cmp); rows.forEach((r, i) => { r.rnk = i && cmp(rows[i - 1], r) === 0 ? rows[i - 1].rnk : i + 1; }); return rows;
+  }
+  const authAtt = (phone, token) => { const p = byPhone(normalizePhone(phone)); const a = p && attOf(p); return a && a.token === token ? a : null; };
+  const BAD = err('bad_token', 'انتهت صلاحية جلستك. أدخل رقم جوالك مرة أخرى للمتابعة');
+  const lookup = ph => {
+    const p = byPhone(ph), s = S();
+    if (!p) return { ok: true, found: false, phone: ph, self_register: s.self_register, state: state() };
+    const a = attOf(p); if (a) advance(a);
+    return { ok: true, found: true, phone: ph, name: p.name, bus_name: busName(p.bus_id), gender: p.gender, state: state(), can_play: canPlay(),
+      self_register: s.self_register, attempt: !a ? 'none' : a.finished_at ? 'finished' : 'in_progress' };
+  };
+
+  /* ---------- حفظ سؤال (مرآة _save_question) ---------- */
+  function saveQuestion(p) {
+    const text = cleanName(p.text), cat = p.category || 'fiqh', opts = p.options, ci = p.correct_index;
+    if (text.length < 3) fail('نص السؤال قصير جداً');
+    if (!['fiqh', 'culture', 'other'].includes(cat)) fail('تصنيف غير صالح');
+    if (!Array.isArray(opts)) fail('الاختيارات مطلوبة');
+    if (opts.length < 2 || opts.length > 6) fail('عدد الاختيارات يجب أن يكون من 2 إلى 6');
+    if (ci == null || ci < 0 || ci >= opts.length) fail('حدد الإجابة الصحيحة');
+    const seen = new Set();
+    opts.forEach(o => { const t = cleanName(o.text).toLowerCase(); if (!t) fail('اختيار فارغ'); if (seen.has(t)) fail('اختيارات مكررة'); seen.add(t); });
+    let Q = p.id ? db.questions.find(x => x.id === p.id) : null;
+    if (p.id && !Q) fail('السؤال غير موجود');
+    if (Q && hasReal(Q.id) && (Q.options.length !== opts.length || opts.some(o => !o.id || !Q.options.some(x => x.id === o.id)))) fail('لا يمكن إضافة أو حذف اختيارات بعد بدء المسابقة');
+    if (!Q) { Q = { id: uid(), created_at: Date.now(), active: true }; db.questions.push(Q); }
+    Object.assign(Q, { text, category: cat, explanation: cleanName(p.explanation) || null,
+      points: p.points === '' || p.points == null ? null : +p.points, seconds: p.seconds === '' || p.seconds == null ? null : +p.seconds });
+    if (p.active != null) Q.active = !!p.active;
+    const old = Q.options || []; Q.options = opts.map(o => ({ id: o.id && old.some(x => x.id === o.id) ? o.id : uid(), text: cleanName(o.text) }));
+    Q.correct_option_id = Q.options[ci].id; return Q;
+  }
+
+  /* ---------- الدوال (نفس أسماء وسيطات schema.sql) ---------- */
+  const H = {
+    get_public_config() {
+      const s = S();
+      const nat = n => /^\d{1,9}$/.test(n.trim()) ? [0, +n] : [1, 0];
+      return { ok: true, server_now: iso(Date.now()), campaign_name: s.campaign_name, primary_color: s.primary_color, logo_version: s.logo_version,
+        has_logo: !!s.logo_data, logo: s.logo_data, state: state(), test_mode: s.test_mode, starts_at: iso(s.starts_at), ends_at: iso(s.ends_at),
+        self_register: s.self_register, show_score: s.show_score, leaderboard_size: s.leaderboard_size,
+        buses: [...db.buses].sort((a, b) => nat(a.name)[0] - nat(b.name)[0] || nat(a.name)[1] - nat(b.name)[1] || a.name.localeCompare(b.name)) };
+    },
+    lookup_participant({ p_phone }) { const ph = normalizePhone(p_phone); return ph ? lookup(ph) : err('invalid_phone', PHONE_HELP); },
+    register_participant({ p_name, p_phone, p_gender, p_bus_id }) {
+      const ph = normalizePhone(p_phone), name = cleanName(p_name), g = parseGender(p_gender), s = S();
+      if (!ph) return err('invalid_phone', PHONE_HELP);
+      if (name.length < 2 || name.length > 80) return err('invalid_name', 'اكتب اسمك الكامل (حرفان على الأقل)');
+      if (!g) return err('invalid_gender', 'اختر الجنس');
+      if (byPhone(ph)) return lookup(ph);
+      if (!s.self_register) return err('registration_closed', 'التسجيل الذاتي مغلق. رقمك غير مسجل، تواصل مع مشرف الحملة');
+      if (['closed', 'published'].includes(state())) return err('closed', 'انتهت المسابقة');
+      if (p_bus_id == null) { if (db.buses.length) return err('invalid_bus', 'اختر رقم الباص'); }
+      else if (!db.buses.some(b => b.id === +p_bus_id)) return err('invalid_bus', 'رقم الباص غير صحيح');
+      db.participants.push({ id: uid(), phone: ph, name, gender: g, bus_id: p_bus_id == null ? null : +p_bus_id, source: 'self', is_test: s.test_mode, created_at: Date.now() });
+      return lookup(ph);
+    },
+    start_attempt({ p_phone, p_token }) {
+      const ph = normalizePhone(p_phone); if (!ph) return err('invalid_phone', PHONE_HELP);
+      const p = byPhone(ph); if (!p) return err('not_registered', 'رقمك غير مسجل. تواصل مع مشرف الحملة');
+      let a = attOf(p);
+      if (a) {
+        advance(a);
+        if (a.finished_at) return { ok: true, status: 'finished', summary: summary(a), state: state() };
+        let token = null; if (a.token !== p_token) { token = uid() + uid(); a.token = token; a.resume_count++; }
+        return { ok: true, status: 'in_progress', token, question: payload(a) };
+      }
+      const st = state();
+      if (!canPlay()) return st === 'draft' ? err('not_open', 'المسابقة لم تُفتح بعد') : st === 'scheduled' ? err('not_started', 'المسابقة لم تبدأ بعد') : err('closed', 'انتهت المسابقة');
+      const s = S();
+      let pool = shuffle(db.questions.filter(q => q.active && q.correct_option_id && q.options.length >= 2));
+      if (s.questions_per_attempt) pool = pool.slice(0, s.questions_per_attempt);
+      if (!pool.length) return err('no_questions', 'لا توجد أسئلة جاهزة بعد. تواصل مع مشرف الحملة');
+      pool = shuffle(pool);
+      a = { id: uid(), participant_id: p.id, token: uid() + uid(), started_at: Date.now(), finished_at: null, cur_idx: 0, total_questions: pool.length,
+        total_points: 0, correct_count: 0, total_ms: 0, resume_count: 0, is_test: s.test_mode, opts: {},
+        qs: pool.map((Q, i) => ({ idx: i, question_id: Q.id, seconds: Q.seconds ?? s.default_seconds, base: Q.points ?? s.base_points, bonus: s.speed_bonus,
+          shown_at: i === 0 ? Date.now() : null, status: 'pending', chosen: null, is_correct: null, points: 0, elapsed_ms: null })) };
+      pool.forEach(Q => { a.opts[Q.id] = shuffle(Q.options).map(o => ({ token: uid().replace(/-/g, '').slice(0, 12), option_id: o.id })); });
+      db.attempts.push(a);
+      return { ok: true, status: 'in_progress', token: a.token, question: payload(a) };
+    },
+    get_current_question({ p_phone, p_token }) {
+      const a = authAtt(p_phone, p_token); if (!a) return BAD; advance(a);
+      return a.finished_at ? { ok: true, status: 'finished', summary: summary(a), state: state() } : { ok: true, status: 'in_progress', question: payload(a) };
+    },
+    submit_answer({ p_phone, p_token, p_idx, p_option }) {
+      const a = authAtt(p_phone, p_token); if (!a) return BAD; advance(a);
+      if (a.finished_at) return { ok: true, status: 'finished', summary: summary(a), state: state() };
+      const q = a.qs[p_idx]; if (!q) return err('bad_idx', 'سؤال غير صالح');
+      if (p_idx < a.cur_idx) return { ok: true, status: 'in_progress', duplicate: true, late: q.status === 'timeout' && p_option != null, question: payload(a) };
+      if (p_idx > a.cur_idx) return err('bad_idx', 'سؤال غير صالح');
+      const s = S(), Q = db.questions.find(x => x.id === q.question_id); let fb = null;
+      if (p_option == null) timeout(q);
+      else {
+        const o = a.opts[q.question_id].find(x => x.token === p_option); if (!o) return err('invalid_option', 'اختيار غير صالح');
+        const el = clamp(Date.now() - q.shown_at, 0, q.seconds * 1000), ok = o.option_id === Q.correct_option_id;
+        Object.assign(q, { status: 'answered', chosen: o.option_id, is_correct: ok, elapsed_ms: el, points: ok ? q.base + Math.round(q.bonus * (1 - el / (q.seconds * 1000))) : 0 });
+        if (s.show_correct) fb = { correct: ok, correct_token: a.opts[q.question_id].find(x => x.option_id === Q.correct_option_id).token };
+      }
+      a.cur_idx = p_idx + 1;
+      if (a.cur_idx >= a.total_questions) { finish(a, Date.now()); return { ok: true, status: 'finished', feedback: fb, summary: summary(a) }; }
+      a.qs[a.cur_idx].shown_at = Date.now() + (fb ? 2000 : 0); recalc(a);
+      return { ok: true, status: 'in_progress', feedback: fb, question: payload(a) };
+    },
+    get_my_result({ p_phone, p_token }) {
+      const ph = normalizePhone(p_phone); if (!ph) return err('invalid_phone', 'رقم الجوال غير صحيح');
+      const p = byPhone(ph); if (!p) return err('not_registered', 'رقمك غير مسجل. تواصل مع مشرف الحملة');
+      const a = attOf(p); if (!a) return { ok: true, status: 'none', state: state() };
+      advance(a); const st = state();
+      if (!a.finished_at) return { ok: true, status: 'in_progress', state: st };
+      if (st !== 'published') return { ok: true, status: 'finished', state: st, points: S().show_score && a.token === p_token ? a.total_points : null };
+      const rk = ranking(), me = rk.find(r => r.participant_id === p.id);
+      const review = a.qs.map(q => {
+        const Q = db.questions.find(x => x.id === q.question_id);
+        return { n: q.idx + 1, text: Q.text, category: Q.category, status: q.status, is_correct: !!q.is_correct, points: q.points,
+          chosen_text: Q.options.find(o => o.id === q.chosen)?.text ?? null, correct_text: Q.options.find(o => o.id === Q.correct_option_id)?.text ?? null, explanation: Q.explanation };
+      });
+      return { ok: true, status: 'published', state: st, name: p.name, bus_name: busName(p.bus_id), rank: me.rnk, ranked_total: rk.length, points: a.total_points,
+        correct_count: a.correct_count, total_questions: a.total_questions, total_ms: a.total_ms, review };
+    },
+    get_leaderboard({ p_phone, p_gender }) {
+      if (state() !== 'published') return err('not_published', 'لم تُنشر النتائج بعد');
+      const ph = normalizePhone(p_phone), g = ['M', 'F'].includes(String(p_gender || '').toUpperCase()) ? String(p_gender).toUpperCase() : null, n = S().leaderboard_size;
+      const cmp = (x, y) => y.points - x.points || x.total_ms - y.total_ms || x.finished_at - y.finished_at;
+      const rows = ranking().filter(r => !g || r.gender === g).sort(cmp);
+      rows.forEach((r, i) => { r.frank = i && cmp(rows[i - 1], r) === 0 ? rows[i - 1].frank : i + 1; });
+      const mk = r => ({ rank: r.frank, name: r.name, bus: r.bus_name, points: r.points, correct: r.correct_count, ms: r.total_ms });
+      const me = ph && rows.find(r => r.phone === ph);
+      return { ok: true, gender: g, size: n, rows: rows.filter(r => r.frank <= n).map(r => ({ ...mk(r), me: r.phone === ph })),
+        me: me ? { ...mk(me), overall_rank: me.rnk } : null };
+    },
+    am_i_admin() { return true; },
+
+    /* ---------- المشرف ---------- */
+    admin_get_settings() { const s = S(); return { ...s, starts_at: iso(s.starts_at), ends_at: iso(s.ends_at), closed_at: iso(s.closed_at), state: state(), server_now: iso(Date.now()) }; },
+    admin_save_settings({ p }) {
+      const s = S();
+      if ('logo_data' in p && p.logo_data && (!/^data:image\//.test(p.logo_data) || p.logo_data.length > 273100)) fail('حجم الشعار يتجاوز 200KB أو أن صيغته غير صالحة');
+      if ('primary_color' in p && !/^#[0-9a-f]{6}$/i.test(p.primary_color)) fail('لون غير صالح');
+      if ('campaign_name' in p && !String(p.campaign_name).trim()) fail('اسم الحملة مطلوب');
+      const st = 'starts_at' in p ? (p.starts_at ? Date.parse(p.starts_at) : null) : s.starts_at, en = 'ends_at' in p ? (p.ends_at ? Date.parse(p.ends_at) : null) : s.ends_at;
+      if (st && en && en <= st) fail('وقت النهاية يجب أن يكون بعد وقت البداية');
+      if (p.test_mode && !s.test_mode && !['draft', 'scheduled'].includes(state())) fail('وضع التجربة متاح فقط قبل فتح المسابقة');
+      for (const k of ['campaign_name', 'primary_color', 'self_register', 'show_score', 'show_correct', 'leaderboard_size', 'base_points', 'speed_bonus', 'default_seconds', 'test_mode'])
+        if (k in p) s[k] = k === 'campaign_name' ? String(p[k]).trim() : p[k];
+      if ('questions_per_attempt' in p) s.questions_per_attempt = p.questions_per_attempt ? +p.questions_per_attempt : null;
+      if ('logo_data' in p) { s.logo_data = p.logo_data || null; s.logo_version++; }
+      s.starts_at = st; s.ends_at = en;
+      if (!['closed', 'published'].includes(state())) s.results_published = false;
+      return H.admin_get_settings();
+    },
+    admin_set_status({ p_status, p_keep_schedule }) {
+      const s = S();
+      if (p_status === 'open') {
+        if (db.attempts.some(a => a.is_test) || db.participants.some(p => p.is_test)) fail('توجد بيانات تجريبية. احذفها أولاً من الإعدادات قبل فتح المسابقة الحقيقية');
+        Object.assign(s, { status: 'open', test_mode: false, results_published: false, closed_at: null });
+        if (!p_keep_schedule) { if (s.starts_at > Date.now()) s.starts_at = null; if (s.ends_at && s.ends_at <= Date.now()) s.ends_at = null; }
+      } else if (p_status === 'closed') { Object.assign(s, { status: 'closed', closed_at: Date.now() }); sweep(); }
+      else if (p_status === 'draft') Object.assign(s, { status: 'draft', results_published: false, closed_at: null });
+      else fail('حالة غير معروفة');
+      return H.admin_get_settings();
+    },
+    admin_publish_results({ p_publish }) {
+      if (p_publish) { if (!['closed', 'published'].includes(state())) fail('لا يمكن نشر النتائج قبل انتهاء المسابقة'); sweep(); S().results_published = true; }
+      else S().results_published = false;
+      return { ...H.admin_get_settings(), test_attempts: db.attempts.filter(a => a.is_test).length };
+    },
+    admin_dashboard() {
+      sweep();
+      const reg = db.participants.length, att = db.attempts.length, fin = db.attempts.filter(a => a.finished_at);
+      const row = (b, ps) => { const r = ps.length, pa = ps.filter(p => attOf(p)).length; return { id: b?.id ?? null, name: b?.name ?? null, registered: r, participated: pa, pct: r ? Math.round(100 * pa / r) : 0 }; };
+      const buses = db.buses.map(b => row(b, db.participants.filter(p => p.bus_id === b.id)));
+      const nb = db.participants.filter(p => p.bus_id == null || !busName(p.bus_id)); if (nb.length) buses.push(row(null, nb));
+      return { ok: true, server_now: iso(Date.now()), state: state(), registered: reg, participated: att, finished: fin.length, in_progress: att - fin.length, not_participated: reg - att,
+        avg_points: fin.length ? Math.round(10 * fin.reduce((s, a) => s + a.total_points, 0) / fin.length) / 10 : 0, buses,
+        top: ranking(true).slice(0, 10).map(r => ({ rank: r.rnk, name: r.name, bus: r.bus_name, points: r.points, correct: r.correct_count, status: r.status })),
+        test_attempts: db.attempts.filter(a => a.is_test).length, test_participants: db.participants.filter(p => p.is_test).length };
+    },
+    admin_save_question({ p }) { const Q = saveQuestion(p); return { ok: true, id: Q.id, has_attempts: hasReal(Q.id) }; },
+    admin_list_questions() {
+      return db.questions.map(Q => ({ id: Q.id, text: Q.text, category: Q.category, explanation: Q.explanation, points: Q.points, seconds: Q.seconds, active: Q.active,
+        correct_option_id: Q.correct_option_id, has_attempts: hasReal(Q.id), options: Q.options.map(o => ({ id: o.id, text: o.text })) }));
+    },
+    admin_set_question_active({ p_id, p_active }) { const Q = db.questions.find(x => x.id === p_id); if (Q) Q.active = p_active; return { ok: true }; },
+    admin_delete_question({ p_id }) {
+      if (hasReal(p_id)) fail('لا يمكن حذف سؤال له إجابات مسجلة. عطّله بدلاً من حذفه');
+      db.questions = db.questions.filter(q => q.id !== p_id); db.attempts.forEach(a => { a.qs = a.qs.filter(q => q.question_id !== p_id); }); return { ok: true };
+    },
+    admin_import_questions({ p_rows }) {
+      let inserted = 0, skipped = 0; const errors = [];
+      p_rows.forEach((r, i) => {
+        try {
+          if (db.questions.some(q => q.text.trim() === String(r.text ?? '').trim())) { skipped++; return; }
+          const { id, ...rest } = r; saveQuestion({ ...rest, options: (r.options || []).map(t => ({ text: t })) }); inserted++;
+        } catch (e) { errors.push({ row: r._row ?? i + 1, message: e.message }); }
+      });
+      return { ok: true, inserted, skipped, errors };
+    },
+    admin_list_buses() {
+      const nat = n => /^\d{1,9}$/.test(n.trim()) ? [0, +n] : [1, 0];
+      return [...db.buses].sort((a, b) => nat(a.name)[0] - nat(b.name)[0] || nat(a.name)[1] - nat(b.name)[1] || a.name.localeCompare(b.name))
+        .map(b => ({ id: b.id, name: b.name, participants: db.participants.filter(p => p.bus_id === b.id).length }));
+    },
+    admin_save_bus({ p_id, p_name }) {
+      const name = toLatinDigits(p_name).trim(); if (!name || name.length > 40) fail('اسم أو رقم الباص مطلوب (حتى 40 حرفاً)');
+      if (db.buses.some(b => b.name.toLowerCase() === name.toLowerCase() && b.id !== p_id)) fail('هذا الباص موجود مسبقاً');
+      if (p_id == null) { db.buses.push({ id: db.nextBus, name }); return { ok: true, id: db.nextBus++ }; }
+      const b = db.buses.find(x => x.id === p_id); if (b) b.name = name; return { ok: true, id: p_id };
+    },
+    admin_delete_bus({ p_id }) { db.buses = db.buses.filter(b => b.id !== p_id); db.participants.forEach(p => { if (p.bus_id === p_id) p.bus_id = null; }); return { ok: true }; },
+    admin_list_participants() {
+      return db.participants.map(p => { const a = attOf(p); return { id: p.id, name: p.name, phone: p.phone, gender: p.gender, bus_id: p.bus_id, bus_name: busName(p.bus_id),
+        source: p.source, is_test: p.is_test, status: !a ? 'none' : a.finished_at ? 'finished' : 'in_progress', points: a ? a.total_points : null }; });
+    },
+    admin_save_participant({ p }) {
+      const ph = normalizePhone(p.phone), name = cleanName(p.name), g = parseGender(p.gender), bus = p.bus_id === '' || p.bus_id == null ? null : +p.bus_id;
+      if (!ph) fail('رقم الجوال غير صحيح'); if (name.length < 2) fail('الاسم مطلوب (حرفان على الأقل)'); if (!g) fail('اختر الجنس');
+      if (bus != null && !db.buses.some(b => b.id === bus)) fail('الباص غير موجود');
+      const dup = byPhone(ph); if (dup && dup.id !== p.id) fail('رقم الجوال مسجل مسبقاً لمشترك آخر');
+      if (p.id) Object.assign(part(p.id), { phone: ph, name, gender: g, bus_id: bus });
+      else { p.id = uid(); db.participants.push({ id: p.id, phone: ph, name, gender: g, bus_id: bus, source: 'admin', is_test: false, created_at: Date.now() }); }
+      return { ok: true, id: p.id, phone: ph };
+    },
+    admin_delete_participant({ p_id }) { db.participants = db.participants.filter(p => p.id !== p_id); db.attempts = db.attempts.filter(a => a.participant_id !== p_id); return { ok: true }; },
+    admin_import_participants({ p_rows, p_mode }) {
+      let inserted = 0, updated = 0, skipped = 0, buses_created = 0; const errors = [];
+      p_rows.forEach((r, i) => {
+        try {
+          const ph = normalizePhone(r.phone), name = cleanName(r.name), g = parseGender(r.gender), bt = toLatinDigits(r.bus ?? '').trim();
+          if (!ph) fail('رقم الجوال غير صحيح'); if (name.length < 2) fail('الاسم مطلوب'); if (!g) fail('الجنس غير معروف (استخدم ذكر/أنثى)');
+          let bus = null;
+          if (bt) { let b = db.buses.find(x => x.name.toLowerCase() === bt.toLowerCase()); if (!b) { b = { id: db.nextBus++, name: bt.slice(0, 40) }; db.buses.push(b); buses_created++; } bus = b.id; }
+          const ex = byPhone(ph);
+          if (!ex) { db.participants.push({ id: uid(), phone: ph, name, gender: g, bus_id: bus, source: 'import', is_test: false, created_at: Date.now() }); inserted++; }
+          else if (p_mode === 'update') { Object.assign(ex, { name, gender: g, bus_id: bus }); updated++; } else skipped++;
+        } catch (e) { errors.push({ row: r._row ?? i + 1, message: e.message }); }
+      });
+      return { ok: true, inserted, updated, skipped, buses_created, errors };
+    },
+    admin_results() {
+      sweep();
+      return ranking(true).map(r => ({ participant_id: r.participant_id, rank: r.rnk, name: r.name, phone: r.phone, gender: r.gender, bus_id: r.bus_id, bus_name: r.bus_name,
+        points: r.points, correct: r.correct_count, total_ms: r.total_ms, status: r.status, finished_at: iso(r.finished_at), resumes: r.resume_count, is_test: r.is_test }));
+    },
+    admin_delete_test_data() {
+      const a = db.attempts.filter(x => x.is_test).length, p = db.participants.filter(x => x.is_test).length;
+      const gone = new Set(db.participants.filter(x => x.is_test).map(x => x.id));
+      db.attempts = db.attempts.filter(x => !x.is_test && !gone.has(x.participant_id)); db.participants = db.participants.filter(x => !x.is_test);
+      return { ok: true, attempts: a, participants: p };
+    },
+    admin_reset_test_attempt({ p_participant_id }) { const n = db.attempts.length; db.attempts = db.attempts.filter(a => !(a.participant_id === p_participant_id && a.is_test)); return { ok: true, deleted: n - db.attempts.length }; },
+    admin_regrade() {
+      let n = 0;
+      db.attempts.forEach(a => {
+        a.qs.forEach(q => {
+          if (q.status !== 'answered') return; const Q = db.questions.find(x => x.id === q.question_id); n++;
+          q.is_correct = !!q.chosen && q.chosen === Q?.correct_option_id;
+          q.points = q.is_correct ? q.base + Math.round(q.bonus * Math.max(0, 1 - (q.elapsed_ms ?? q.seconds * 1000) / (q.seconds * 1000))) : 0;
+        }); recalc(a);
+      });
+      return { ok: true, regraded: n };
+    },
+  };
+  // أي استدعاء يمر عبر هنا: يحاكي زمن الشبكة ويحفظ الحالة
+  return {
+    async rpc(name, params = {}) {
+      await sleep(25);
+      try {
+        if (!H[name]) throw new Error('دالة غير معروفة: ' + name);
+        const data = H[name](params); save(); return { data: JSON.parse(JSON.stringify(data)), error: null };
+      } catch (e) { save(); return { data: null, error: { message: e.message } }; }
+    },
+    reset() { db = seed(); save(); },
+  };
+}
+
+/* =====================================================================
+   واجهة المشترك
+   ===================================================================== */
+const SESS = 'kq_session', PEND = 'kq_pending';
+const LETTERS = ['أ', 'ب', 'ج', 'د', 'هـ', 'و'];
+const P = { phone: null, token: null, resync: null };
+const cleanups = [];
+const onLeave = fn => cleanups.push(fn);
+const alertEl = (kind, msg) => h('div', { class: 'alert ' + kind }, msg);
+const tokenFor = phone => { const s = store.get(SESS); return s && s.phone === phone ? s.token : null; };
+
+// عرض شاشة كاملة (ترويسة الحملة + المحتوى)
+function screen(...content) {
+  cleanups.splice(0).forEach(f => { try { f(); } catch { /* */ } });
+  P.resync = null;
+  mount($('#app'), modeBars(), brandHeader(), h('main', { class: 'wrap' }, content));
+  window.scrollTo(0, 0);
+}
+const loadingEl = txt => h('div', { class: 'loading' }, txt || 'جارٍ التحميل…');
+
+function stateBanner() {
+  const st = CFG.state;
+  if (st === 'draft') return alertEl('info', 'المسابقة لم تُفتح بعد. ترقّب فتحها من مشرف الحملة.');
+  if (st === 'scheduled') {
+    const c = h('b', { class: 'num' });
+    onLeave(countdown(c, CFG.starts_at, () => setTimeout(refreshHome, 800)));
+    return h('div', { class: 'alert warn center' }, 'تبدأ المسابقة بعد', h('div', { style: { fontSize: '1.7rem' } }, c));
+  }
+  if (st === 'open') return alertEl('ok', 'المسابقة مفتوحة الآن. أدخل رقم جوالك للمشاركة.');
+  if (st === 'closed') return alertEl('warn', 'انتهت المسابقة. سيُعلن عن النتائج قريباً بإذن الله.');
+  return alertEl('info', 'نُشرت النتائج! أدخل رقم جوالك لتعرف ترتيبك وتراجع إجاباتك.');
+}
+async function refreshHome() { try { await loadConfig(); } catch { /* */ } showLogin(); }
+
+/* ---------------------------- الدخول ---------------------------- */
+function showLogin(prefill = '') {
+  const out = h('div');
+  const inp = h('input', { class: 'input ltr', type: 'tel', inputmode: 'tel', autocomplete: 'tel', placeholder: '05xxxxxxxx', value: prefill, maxlength: 24, 'aria-label': 'رقم الجوال' });
+  const go = btnAct('متابعة', 'block', wrapFail(async () => {
+    out.replaceChildren();
+    if (!normalizePhone(inp.value)) return out.append(alertEl('err', PHONE_HELP));
+    const r = await rpcRetry('lookup_participant', { p_phone: inp.value });
+    if (!r.ok) return out.append(alertEl('err', r.message));
+    P.phone = r.phone;
+    if (!r.found) return (r.self_register && !['closed', 'published'].includes(r.state)) ? showRegister(r.phone) : showNotRegistered(r);
+    if (r.attempt === 'finished' && r.state === 'published') return showResults();
+    showConfirm(r);
+  }));
+  screen(
+    h('div', { class: 'card hero' }, h('img', { src: CFG.logo, alt: '' }), h('h1', null, 'مسابقة المعتمرين'), h('div', { class: 'orn' }, h('i', { class: 'star' })),
+      h('p', { class: 'muted' }, 'مسابقة فقهية وثقافية للطريق — شاركنا وتعلّم واربح الأجر بإذن الله')),
+    stateBanner(),
+    h('form', { class: 'card', onsubmit: e => { e.preventDefault(); go.click(); } },
+      h('div', { class: 'field' }, h('label', null, 'رقم الجوال'), inp, h('div', { class: 'hint' }, 'اكتب الرقم الذي سجّلت به في الحملة')), out, go),
+    DEMO && h('div', { class: 'center small mb' }, h('a', { href: '#/admin' }, 'لوحة المشرف (تجريبي)'), ' · ',
+      h('a', { href: '#', onclick: e => { e.preventDefault(); backend.reset(); store.del(SESS); store.del(PEND); location.reload(); } }, 'إعادة ضبط البيانات التجريبية')),
+  );
+  inp.focus({ preventScroll: true });
+  // تحديث حالة المسابقة تلقائياً (فتح/إغلاق/نشر) أثناء بقاء الصفحة مفتوحة
+  const id = setInterval(async () => { try { const old = CFG.state; await loadConfig(); if (old !== CFG.state && !inp.value) showLogin(); } catch { /* */ } }, 25000);
+  onLeave(() => clearInterval(id));
+}
+
+function showNotRegistered(info) {
+  const msg = ['closed', 'published'].includes(info.state) ? 'رقمك غير مسجل في هذه المسابقة.' : 'رقمك غير مسجل، تواصل مع مشرف الحملة.';
+  screen(h('div', { class: 'card center' }, h('h2', null, 'رقم غير مسجل'), h('p', { class: 'num bold' }, phoneShow(info.phone)), alertEl('warn', msg),
+    h('button', { class: 'btn ghost block', onclick: () => showLogin() }, 'تجربة رقم آخر')));
+}
+
+function showRegister(phone) {
+  const name = h('input', { class: 'input', autocomplete: 'name', placeholder: 'الاسم الكامل', maxlength: 80 });
+  const ph = h('input', { class: 'input ltr', type: 'tel', inputmode: 'tel', value: phoneShow(phone) });
+  const bus = h('select', { class: 'input' }, h('option', { value: '' }, 'اختر رقم الباص'), CFG.buses.map(b => h('option', { value: b.id }, busLabel(b.name))));
+  const gen = g => h('label', null, h('input', { type: 'radio', name: 'g', value: g }), h('span', null, g === 'M' ? 'رجل' : 'امرأة'));
+  const out = h('div');
+  const go = btnAct('تسجيل ومتابعة', 'block', wrapFail(async () => {
+    out.replaceChildren();
+    const g = $('input[name=g]:checked')?.value;
+    if (name.value.trim().length < 2) return out.append(alertEl('err', 'اكتب اسمك الكامل'));
+    if (!normalizePhone(ph.value)) return out.append(alertEl('err', PHONE_HELP));
+    if (!g) return out.append(alertEl('err', 'اختر الجنس'));
+    if (!bus.value && CFG.buses.length) return out.append(alertEl('err', 'اختر رقم الباص'));
+    const r = await rpcRetry('register_participant', { p_name: name.value, p_phone: ph.value, p_gender: g, p_bus_id: bus.value ? +bus.value : null });
+    if (!r.ok) return out.append(alertEl('err', r.message));
+    P.phone = r.phone; toast('تم تسجيلك بنجاح', 'ok');
+    r.attempt === 'finished' && r.state === 'published' ? showResults() : showConfirm(r, true);
+  }));
+  screen(h('form', { class: 'card', onsubmit: e => { e.preventDefault(); go.click(); } },
+    h('h2', null, 'تسجيل بيانات المشارك'), alertEl('info', 'رقمك غير موجود في قائمة الحملة، يمكنك تسجيل بياناتك للمشاركة.'),
+    h('div', { class: 'field' }, h('label', null, 'الاسم'), name), h('div', { class: 'field' }, h('label', null, 'رقم الجوال'), ph),
+    h('div', { class: 'field' }, h('label', null, 'الجنس'), h('div', { class: 'seg' }, gen('M'), gen('F'))),
+    h('div', { class: 'field' }, h('label', null, 'رقم الباص'), bus), out, go,
+    h('button', { type: 'button', class: 'btn ghost block mt', onclick: () => showLogin() }, 'رجوع')));
+}
+
+/* ---------------------------- تأكيد البيانات ---------------------------- */
+function showConfirm(info, justRegistered = false) {
+  const rules = h('ul', { class: 'small muted', style: { paddingInlineStart: '20px', margin: '8px 0' } },
+    h('li', null, 'لكل سؤال وقت محدد، وينتقل تلقائياً للتالي ولا يمكن الرجوع للسابق.'),
+    h('li', null, 'مشاركة واحدة فقط لكل رقم جوال.'),
+    h('li', null, 'إن أُغلقت الصفحة أثناء المسابقة أدخل رقمك لتتابع (ويستمر العدّاد).'));
+  let action;
+  if (info.attempt === 'finished') action = [alertEl('ok', 'لقد شاركت في المسابقة مسبقاً. شكراً لك!'), btnAct('عرض حالة مشاركتي', '', wrapFail(showFinishedStatus))];
+  else if (info.attempt === 'in_progress') action = [alertEl('warn', 'لديك مشاركة قيد التنفيذ.'), rules, btnAct('تابع المسابقة', 'gold block', wrapFail(startQuiz))];
+  else if (info.can_play) action = [rules, btnAct('نعم، هذه بياناتي — ابدأ المسابقة', 'gold block', wrapFail(startQuiz))];
+  else action = [info.state === 'scheduled' ? alertEl('warn', 'المسابقة لم تبدأ بعد.') : info.state === 'draft' ? alertEl('info', 'المسابقة لم تُفتح بعد.')
+    : alertEl('warn', info.state === 'published' ? 'لم تشارك في هذه المسابقة.' : 'انتهت المسابقة.')];
+  screen(h('div', { class: 'card' },
+    justRegistered ? alertEl('ok', 'تم تسجيلك بنجاح.') : null,
+    h('h2', null, 'هل هذه بياناتك؟'),
+    h('div', { class: 'card gold', style: { margin: '10px 0' } }, h('div', { class: 'bold', style: { fontSize: '1.3rem' } }, info.name),
+      h('div', { class: 'muted' }, busLabel(info.bus_name), ' · ', h('span', { class: 'num' }, phoneShow(info.phone)))),
+    action, h('button', { class: 'btn ghost block mt', onclick: () => showLogin() }, 'ليست بياناتي / رقم آخر')));
+}
+async function showFinishedStatus() {
+  const r = await rpc('get_my_result', { p_phone: P.phone, p_token: tokenFor(P.phone) });
+  if (r.status === 'published') return showResults();
+  showDone({ show_score: r.points != null, points: r.points });
+}
+
+/* ---------------------------- المسابقة ---------------------------- */
+async function startQuiz() {
+  const r = await rpcRetry('start_attempt', { p_phone: P.phone, p_token: tokenFor(P.phone) });
+  if (!r.ok) {
+    if (['not_open', 'not_started', 'closed'].includes(r.error)) { await loadConfig(); toast(r.message, 'err'); return showLogin(phoneShow(P.phone)); }
+    return toast(r.message, 'err');
+  }
+  if (r.status === 'finished') return showDone(r.summary);
+  P.token = r.token || tokenFor(P.phone);
+  store.set(SESS, { phone: P.phone, token: P.token });
+  runQuestion(r.question);
+}
+
+function runQuestion(q, autoToken = null) {
+  const now0 = performance.now(), startAt = now0 + q.starts_in_ms, deadline = now0 + q.remaining_ms, total = q.seconds * 1000;
+  let locked = false, shown = false, timer = null;
+  const secs = h('div', { class: 'secs num' }), fill = h('i');
+  const timerEl = h('div', { class: 'timer row' }, h('div', { class: 'bar grow' }, fill), secs);
+  const net = h('div', { class: 'netwarn hide' }, 'انقطع الاتصال… نعيد المحاولة تلقائياً ولن تضيع إجابتك');
+  const opts = h('div', { class: 'opts' + (q.options.length > 3 ? ' two' : '') });
+  const box = h('div', null, h('div', { class: 'getready' }, 'استعد… السؤال التالي بعد لحظات'));
+
+  const setLocked = v => { locked = v; opts.classList.toggle('locked', v); };
+  async function submit(token, btn) {
+    setLocked(true); clearInterval(timer);
+    store.set(PEND, { idx: q.idx, token, phone: P.phone });
+    let r;
+    try { r = await rpcRetry('submit_answer', { p_phone: P.phone, p_token: P.token, p_idx: q.idx, p_option: token }, { onRetry: () => net.classList.remove('hide') }); }
+    catch (e) { net.classList.add('hide'); toast(errMsg(e), 'err'); btn?.classList.remove('sel'); setLocked(false); startTimer(); return; }
+    net.classList.add('hide'); store.del(PEND);
+    if (!r.ok) { return r.error === 'bad_token' ? lostSession() : resync(); }
+    if (token == null) toast('انتهى وقت السؤال', 'err');
+    else if (r.late) toast('وصلت إجابتك بعد انتهاء الوقت ولم تُحتسب', 'err');
+    else if (!r.duplicate) toast('✓ تم تسجيل إجابتك', 'ok');
+    if (r.feedback) {                       // الصح/الخطأ يظهر فقط إذا فعّله المشرف
+      btn?.classList.add(r.feedback.correct ? 'ok' : 'bad');
+      $$('.opt', opts).forEach(b => { if (b.dataset.t === r.feedback.correct_token) b.classList.add('ok'); });
+      await sleep(1700);
+    }
+    if (r.status === 'finished') return showDone(r.summary);
+    runQuestion(r.question);
+  }
+  q.options.forEach((o, i) => opts.append(h('button', { class: 'opt', 'data-t': o.token, onclick: e => { if (!locked && shown) { e.currentTarget.classList.add('sel'); submit(o.token, e.currentTarget); } } },
+    h('span', { class: 'k' }, LETTERS[i]), h('span', { class: 'grow' }, o.text))));
+
+  function tick() {
+    const t = performance.now();
+    if (!shown && t >= startAt) { shown = true; mount(box, opts); if (autoToken) { const b = $$('.opt', opts).find(x => x.dataset.t === autoToken); if (b) { b.classList.add('sel'); submit(autoToken, b); return; } } }
+    const left = Math.max(0, deadline - Math.max(t, startAt));
+    fill.style.width = (shown ? left / total * 100 : 100) + '%';
+    secs.textContent = Math.ceil(left / 1000);
+    timerEl.classList.toggle('low', left <= 5000);
+    if (shown && !locked && t >= deadline) submit(null, null);       // انتهى الوقت: تسجيل بلا إجابة
+  }
+  function startTimer() { clearInterval(timer); timer = setInterval(tick, 100); }
+  async function resync() {
+    try {
+      const r = await rpc('get_current_question', { p_phone: P.phone, p_token: P.token });
+      if (!r.ok) return lostSession();
+      r.status === 'finished' ? showDone(r.summary) : runQuestion(r.question);
+    } catch (e) { toast(errMsg(e), 'err'); }
+  }
+
+  screen(net, h('div', { class: 'prog' }, h('span', null, `السؤال ${q.idx + 1} من ${q.total}`), h('div', { class: 'bar' }, h('i', { style: { width: (q.idx / q.total * 100) + '%' } }))), timerEl,
+    h('div', { class: 'card' }, h('div', { class: 'qcat' }, h('span', { class: 'chip gold' }, CATS[q.category] || '')), h('div', { class: 'qtext' }, q.text), box));
+  tick(); startTimer();
+  onLeave(() => clearInterval(timer));
+  // عند عودة المتصفح للواجهة (بعد قفل الشاشة مثلاً) نزامن العدّاد مع الخادم
+  P.resync = () => { if (!locked) resync(); };
+}
+document.addEventListener('visibilitychange', () => { if (!document.hidden && P.resync) P.resync(); });
+
+function lostSession() {
+  const s = store.get(SESS); if (s) store.set(SESS, { phone: s.phone, token: null });
+  screen(h('div', { class: 'card center' }, h('h2', null, 'انتهت جلستك'), alertEl('warn', 'أدخل رقم جوالك مرة أخرى للمتابعة من حيث توقفت.'),
+    h('button', { class: 'btn block', onclick: () => showLogin(phoneShow(P.phone)) }, 'متابعة')));
+}
+
+/* ---------------------------- شكراً + النتائج ---------------------------- */
+function showDone(summary) {
+  store.del(PEND);
+  const pts = summary?.show_score && summary.points != null ? summary.points : null;
+  screen(h('div', { class: 'card center' }, h('div', { class: 'ack' }, h('div', { class: 'tick' }, '✓'), 'شكراً، تمت مشاركتك'),
+    pts != null ? h('div', { class: 'card gold' }, h('div', { class: 'muted' }, 'مجموع نقاطك'), h('div', { class: 'num', style: { fontSize: '2.6rem', fontWeight: 800, color: 'var(--p-d)' } }, fmtN(pts))) : null,
+    h('p', { class: 'muted' }, 'سيُعلن عن الترتيب والنتائج بعد انتهاء المسابقة بإذن الله. ارجع لهذه الصفحة وأدخل رقمك لمعرفة ترتيبك.'),
+    btnAct('هل نُشرت النتائج؟', 'ghost block', wrapFail(async () => { await loadConfig(); CFG.state === 'published' ? showResults() : toast('لم تُنشر النتائج بعد'); })),
+    h('button', { class: 'btn ghost block mt', onclick: () => showLogin() }, 'الصفحة الرئيسية')));
+}
+
+const medal = r => r === 1 ? '🥇' : r === 2 ? '🥈' : r === 3 ? '🥉' : r;
+async function showResults() {
+  screen(loadingEl('جارٍ تحميل النتائج…'));
+  let me, lb;
+  try { [me, lb] = await Promise.all([rpcRetry('get_my_result', { p_phone: P.phone, p_token: tokenFor(P.phone) }), rpcRetry('get_leaderboard', { p_phone: P.phone, p_gender: null })]); }
+  catch (e) { return screen(h('div', { class: 'card center' }, alertEl('err', errMsg(e)), h('button', { class: 'btn', onclick: showResults }, 'إعادة المحاولة'))); }
+  if (me.status !== 'published') return showDone({ show_score: me.points != null, points: me.points });
+
+  const list = h('div'), seg = h('div', { class: 'seg mb' });
+  const drawLb = d => {
+    if (!d.ok) return mount(list, alertEl('warn', d.message));
+    const rows = d.rows.map(r => h('li', { class: r.me ? 'me' : '' }, h('span', { class: 'rk' }, medal(r.rank)),
+      h('div', { class: 'grow' }, h('div', { class: 'bold' }, r.name), h('div', { class: 'small muted' }, busLabel(r.bus), ' · ', r.correct, ' صحيحة')), h('span', { class: 'pt num' }, fmtN(r.points))));
+    const meOut = d.me && !d.rows.some(r => r.me) ? [h('div', { class: 'center muted small mt' }, '• • •'),
+      h('ul', { class: 'lb' }, h('li', { class: 'me' }, h('span', { class: 'rk' }, d.me.rank), h('div', { class: 'grow' }, h('div', { class: 'bold' }, d.me.name + ' (أنت)'), h('div', { class: 'small muted' }, busLabel(d.me.bus))), h('span', { class: 'pt num' }, fmtN(d.me.points))))] : [];
+    mount(list, rows.length ? h('ul', { class: 'lb' }, rows) : h('p', { class: 'muted center' }, 'لا توجد نتائج في هذه الفئة'), meOut);
+  };
+  const load = wrapFail(async g => drawLb(await rpcRetry('get_leaderboard', { p_phone: P.phone, p_gender: g })));
+  [['', 'الكل'], ['M', 'رجال'], ['F', 'نساء']].forEach(([g, l], i) => seg.append(h('label', null, h('input', { type: 'radio', name: 'lbg', checked: i === 0, onchange: () => load(g || null) }), h('span', null, l))));
+  drawLb(lb);
+
+  const reviewBox = h('div', { class: 'hide' }, me.review.map(r => h('div', { class: 'rev ' + (r.is_correct ? 'ok' : 'bad') },
+    h('div', { class: 'bold' }, `${r.n}. ${r.text}`),
+    h('div', { class: 'a' }, 'إجابتك: ', h('b', null, r.chosen_text || (r.status === 'timeout' ? 'لم تُجب (انتهى الوقت)' : '—')), r.is_correct ? ' ✅' : ' ❌'),
+    r.is_correct ? null : h('div', { class: 'a' }, 'الصحيحة: ', h('b', { style: { color: 'var(--ok)' } }, r.correct_text)),
+    r.explanation ? h('div', { class: 'e' }, r.explanation) : null, h('div', { class: 'small muted' }, `+${r.points} نقطة`))));
+  const lbBox = h('div', null, h('h3', null, 'المتصدرون'), seg, list);
+  const tabBtn = (txt, on) => h('button', { class: 'btn sm ' + (on ? '' : 'ghost'), onclick: e => { const rev = txt.includes('مراجعة'); reviewBox.classList.toggle('hide', !rev); lbBox.classList.toggle('hide', rev); $$('.tabsw button').forEach(b => b.classList.add('ghost')); e.currentTarget.classList.remove('ghost'); } }, txt);
+
+  screen(
+    h('div', { class: 'card gold center' }, h('div', { class: 'muted' }, me.name), h('div', { class: 'small muted' }, busLabel(me.bus_name)),
+      h('div', { class: 'orn' }, h('i', { class: 'star' })), h('div', { class: 'muted' }, 'ترتيبك'),
+      h('div', { class: 'num', style: { fontSize: '3.4rem', fontWeight: 800, color: 'var(--p-d)', lineHeight: 1.2 } }, medal(me.rank)),
+      h('div', { class: 'small muted mb' }, `من ${me.ranked_total} مشارك`),
+      h('div', { class: 'bigstat' }, h('div', null, h('b', { class: 'num' }, fmtN(me.points)), h('span', null, 'نقطة')),
+        h('div', null, h('b', { class: 'num' }, `${me.correct_count}/${me.total_questions}`), h('span', null, 'صحيحة')), h('div', null, h('b', { class: 'num' }, fmtDur(me.total_ms)), h('span', null, 'زمن الإجابة')))),
+    h('div', { class: 'card' }, h('div', { class: 'row tabsw mb' }, tabBtn('المتصدرون', true), tabBtn('مراجعة إجاباتي', false)), lbBox, reviewBox),
+    h('button', { class: 'btn ghost block', onclick: () => showLogin() }, 'الصفحة الرئيسية'));
+}
+
+/* ---------------------------- الإقلاع ---------------------------- */
+async function bootParticipant() {
+  const sess = store.get(SESS);
+  if (sess?.phone && sess.token) {
+    P.phone = sess.phone; P.token = sess.token;
+    screen(loadingEl('جارٍ استعادة مشاركتك…'));
+    try {
+      const r = await rpcRetry('get_current_question', { p_phone: P.phone, p_token: P.token }, { shouldContinue: () => !location.hash.startsWith('#/admin') });
+      if (r.ok && r.status === 'in_progress') {
+        const pend = store.get(PEND);       // إجابة لم تصل قبل انقطاع الإنترنت: تُرسل الآن
+        return runQuestion(r.question, pend && pend.phone === P.phone && pend.idx === r.question.idx && r.question.remaining_ms > 0 ? pend.token : null);
+      }
+      if (r.ok && r.status === 'finished') return CFG.state === 'published' ? showResults() : showDone(r.summary);
+      if (!r.ok) store.set(SESS, { phone: sess.phone, token: null });
+    } catch (e) { return screen(h('div', { class: 'card center' }, alertEl('err', errMsg(e)), h('button', { class: 'btn', onclick: bootParticipant }, 'إعادة المحاولة'))); }
+  }
+  showLogin(sess?.phone ? phoneShow(sess.phone) : '');
+}
+
+/* =====================================================================
+   لوحة المشرف (#/admin)
+   ===================================================================== */
+const ADMIN_TABS = [['home', 'الرئيسية'], ['questions', 'الأسئلة'], ['participants', 'المشتركون'], ['buses', 'الباصات'], ['results', 'النتائج'], ['settings', 'الإعدادات']];
+const STATE_LABEL = { draft: 'مسودة', scheduled: 'مجدولة', open: 'مفتوحة', closed: 'مغلقة', published: 'نتائج منشورة' };
+const stateChip = st => h('span', { class: 'statelabel st-' + st }, STATE_LABEL[st] || st);
+let adminTimers = [];
+const adminLeave = () => { adminTimers.splice(0).forEach(clearInterval); };
+
+// وعاء الصفحة: ترويسة + تبويبات + محتوى
+function adminShell(active, ...content) {
+  adminLeave();
+  mount($('#app'), modeBars(), brandHeader(h('div', { class: 'row noprint' },
+    h('a', { class: 'btn sm ghost', style: { background: 'rgba(255,255,255,.95)' }, href: '#/' }, 'صفحة المشترك'),
+    h('button', { class: 'btn sm gold', onclick: async () => { await adminAuth.signOut(); location.hash = '#/admin'; adminBoot(); } }, 'خروج'))),
+    h('nav', { class: 'tabs noprint' }, ADMIN_TABS.map(([k, l]) => h('a', { href: '#/admin/' + k, class: k === active ? 'on' : '' }, l))),
+    h('main', { class: 'wrap wide' }, content));
+}
+
+/* ---------------------------- الدخول ---------------------------- */
+function adminLogin(msg = '') {
+  const email = h('input', { class: 'input ltr', type: 'email', autocomplete: 'username', placeholder: 'البريد الإلكتروني' });
+  const pass = h('input', { class: 'input ltr', type: 'password', autocomplete: 'current-password', placeholder: 'كلمة المرور' });
+  const out = h('div', null, msg && alertEl('err', msg));
+  const go = btnAct('دخول', 'block', async () => {
+    out.replaceChildren();
+    try { await adminAuth.signIn(email.value, pass.value); await adminBoot(); }
+    catch (e) { out.append(alertEl('err', errMsg(e))); }
+  });
+  mount($('#app'), modeBars(), brandHeader(), h('main', { class: 'wrap' },
+    h('form', { class: 'card', onsubmit: e => { e.preventDefault(); go.click(); } }, h('h2', null, 'دخول المشرف'),
+      DEMO ? alertEl('info', 'الوضع التجريبي: اضغط «دخول» مباشرة بدون بيانات.') : null,
+      h('div', { class: 'field' }, email), h('div', { class: 'field' }, pass), out, go),
+    h('div', { class: 'center' }, h('a', { href: '#/' }, 'العودة لصفحة المشترك'))));
+}
+
+async function adminBoot() {
+  const user = await adminAuth.user().catch(() => null);
+  if (!user) return adminLogin();
+  let ok = false;
+  try { ok = await rpc('am_i_admin'); } catch (e) { return adminLogin(errMsg(e)); }
+  if (!ok) { await adminAuth.signOut(); return adminLogin('هذا الحساب ليس ضمن المشرفين. تأكد أن بريدك موجود في جدول admins.'); }
+  const tab = (location.hash.split('/')[2] || 'home');
+  const view = ADMIN_VIEWS[tab] || ADMIN_VIEWS.home;
+  adminShell(ADMIN_VIEWS[tab] ? tab : 'home', loadingEl());
+  try { await view(); } catch (e) {
+    if (e.code === 'auth') return adminLogin(errMsg(e));
+    mount($('main'), h('div', { class: 'card' }, alertEl('err', errMsg(e)), h('button', { class: 'btn', onclick: adminBoot }, 'إعادة المحاولة')));
+  }
+}
+const body = (...c) => mount($('main'), ...c);
+
+/* ---------------------------- الرئيسية ---------------------------- */
+async function viewHome() {
+  const draw = async (first) => {
+    const [d, s] = await Promise.all([rpc('admin_dashboard'), rpc('admin_get_settings')]);
+    const st = d.state, pctBar = p => h('div', { class: 'pbar ' + (p < 40 ? 'low' : p < 75 ? 'mid' : '') }, h('i', { style: { width: p + '%' } }));
+    const act = (label, cls, fn, confirm) => btnAct(label, cls, wrapFail(async () => {
+      if (confirm && !(await confirmDlg(confirm))) return; await fn(); adminBoot();
+    }));
+    const ctl = [];
+    if (st === 'draft' || st === 'scheduled') ctl.push(act('فتح المسابقة الآن', 'gold', () => rpc('admin_set_status', { p_status: 'open', p_keep_schedule: false }), { title: 'فتح المسابقة؟', text: 'سيتمكن المشتركون من البدء فوراً. (أي موعد بداية مستقبلي سيُلغى).', ok: 'فتح' }));
+    if (st === 'open') ctl.push(act('إنهاء المسابقة الآن', 'danger', () => rpc('admin_set_status', { p_status: 'closed' }), { title: 'إنهاء المسابقة؟', text: 'ستُنهى كل المحاولات الجارية فوراً ويُحسب ما أُجيب منها، ولن يُسمح بمشاركات جديدة.', ok: 'إنهاء', danger: true }));
+    if (st === 'closed') ctl.push(act('نشر النتائج', 'gold', () => rpc('admin_publish_results', { p_publish: true }), { title: 'نشر النتائج؟', text: 'سيرى كل مشترك ترتيبه وقائمة المتصدرين ويراجع إجاباته (مع الإجابات الصحيحة).' + (d.test_attempts ? ` ⚠️ يوجد ${d.test_attempts} محاولة تجريبية!` : ''), ok: 'نشر' }),
+      act('إعادة فتح المسابقة', 'ghost', () => rpc('admin_set_status', { p_status: 'open', p_keep_schedule: false }), { title: 'إعادة الفتح؟', text: 'ستُفتح المسابقة من جديد. المحاولات المنتهية تبقى كما هي.', ok: 'فتح' }));
+    if (st === 'published') ctl.push(act('إخفاء النتائج', 'ghost', () => rpc('admin_publish_results', { p_publish: false }), { title: 'إخفاء النتائج؟', text: 'سيعود المشتركون لرؤية «تمت مشاركتك» فقط.', ok: 'إخفاء' }),
+      h('a', { class: 'btn gold', href: '#/admin/results' }, 'إعلان الفائزين'));
+    if (['open', 'closed', 'scheduled'].includes(st)) ctl.push(act('إعادة لمسودة', 'ghost sm', () => rpc('admin_set_status', { p_status: 'draft' }), { title: 'إعادة المسابقة لمسودة؟', text: 'ستُخفى المسابقة عن المشتركين. المحاولات المسجلة تبقى.', ok: 'تأكيد' }));
+
+    body(
+      d.test_attempts + d.test_participants > 0 ? h('div', { class: 'alert warn' }, `🧪 يوجد بيانات تجريبية (${d.test_attempts} محاولة، ${d.test_participants} مسجَّل تجريبي). احذفها من الإعدادات قبل الإطلاق.`) : null,
+      h('div', { class: 'card' }, h('div', { class: 'row sp' }, h('div', null, h('div', { class: 'muted small' }, 'حالة المسابقة'), stateChip(st)),
+        h('div', { class: 'row' }, ctl)),
+        s.starts_at || s.ends_at ? h('div', { class: 'small muted mt' }, s.starts_at ? `البداية: ${fmtDate(s.starts_at)}` : '', s.starts_at && s.ends_at ? ' · ' : '', s.ends_at ? `النهاية: ${fmtDate(s.ends_at)}` : '') : null),
+      h('div', { class: 'stats' }, [['registered', 'المسجلون'], ['participated', 'شاركوا'], ['not_participated', 'لم يشاركوا'], ['in_progress', 'يشاركون الآن'], ['avg_points', 'متوسط النقاط']]
+        .map(([k, l]) => h('div', { class: 'stat' }, h('b', { class: 'num' }, k === 'avg_points' ? d.avg_points : fmtN(d[k])), h('span', null, l)))),
+      h('div', { class: 'card' }, h('h3', null, 'نسبة المشاركة لكل باص'), h('div', { class: 'tblw' }, h('table', { class: 'tbl' }, h('thead', null, h('tr', null, ['الباص', 'المسجلون', 'شاركوا', 'النسبة', ''].map(x => h('th', null, x)))),
+        h('tbody', null, d.buses.length ? d.buses.map(b => h('tr', null, h('td', { class: 'bold' }, busLabel(b.name)), h('td', { class: 'num' }, b.registered), h('td', { class: 'num' }, b.participated), h('td', { class: 'num' }, b.pct + '%'), h('td', { style: { width: '35%' } }, pctBar(b.pct))))
+          : h('tr', null, h('td', { colspan: 5, class: 'center muted' }, 'لا توجد بيانات بعد')))))),
+      h('div', { class: 'card' }, h('h3', null, 'الترتيب المباشر (أول 10)'), d.top.length ? h('div', { class: 'tblw' }, h('table', { class: 'tbl' }, h('thead', null, h('tr', null, ['#', 'الاسم', 'الباص', 'النقاط', 'الصحيحة', 'الحالة'].map(x => h('th', null, x)))),
+        h('tbody', null, d.top.map(r => h('tr', null, h('td', { class: 'num bold' }, r.rank), h('td', null, r.name), h('td', null, busLabel(r.bus)), h('td', { class: 'num bold' }, fmtN(r.points)), h('td', { class: 'num' }, r.correct),
+          h('td', null, h('span', { class: 'chip ' + (r.status === 'finished' ? 'ok' : 'gold') }, r.status === 'finished' ? 'أنهى' : 'جارٍ'))))))) : h('p', { class: 'muted' }, 'لم يبدأ أحد بعد.')),
+      linkCard(),
+    );
+    if (first) adminTimers.push(setInterval(() => { if (location.hash === '#/admin' || location.hash === '#/admin/home') draw(false).catch(() => {}); }, 10000));
+  };
+  await draw(true);
+}
+
+// بطاقة رابط المسابقة + QR + نسخ
+function linkCard() {
+  const url = contestUrl(), qr = h('div', { class: 'qrbox' }, h('span', { class: 'muted small' }, 'جارٍ إنشاء الرمز…'));
+  loadQR().then(q => { const c = q(0, 'M'); c.addData(url); c.make(); qr.innerHTML = c.createSvgTag({ cellSize: 4, margin: 2, scalable: true }); }).catch(() => mount(qr, h('span', { class: 'muted small' }, 'تعذّر تحميل مكتبة QR')));
+  const wa = 'https://wa.me/?text=' + encodeURIComponent(`${CFG.campaign_name} — مسابقة المعتمرين\nشارك الآن من جوالك:\n${url}`);
+  return h('div', { class: 'card' }, h('h3', null, 'رابط المسابقة'), h('div', { class: 'row', style: { alignItems: 'flex-start' } },
+    h('div', { class: 'grow', style: { minWidth: '240px' } }, h('div', { class: 'linkbox num' }, url), h('div', { class: 'row mt' },
+      h('button', { class: 'btn sm', onclick: () => copyText(url) }, 'نسخ الرابط'), h('a', { class: 'btn sm gold', href: wa, target: '_blank', rel: 'noopener' }, 'مشاركة عبر واتساب')),
+      DEMO ? h('p', { class: 'hint' }, 'في الوضع التجريبي هذا رابط الملف المحلي. بعد النشر على GitHub Pages سيظهر رابط الموقع الفعلي.') : null), qr));
+}
+
+/* ---------------------------- الإعدادات ---------------------------- */
+// ضغط الشعار في المتصفح إلى ≤ 200KB (data URL)
+async function compressLogo(file) {
+  if (!file.type.startsWith('image/')) throw new Error('اختر ملف صورة');
+  const img = await new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => no(new Error('تعذّر قراءة الصورة')); i.src = URL.createObjectURL(file); });
+  for (const max of [320, 256, 192, 128]) {
+    const k = Math.min(1, max / Math.max(img.width, img.height)), c = h('canvas', { width: Math.round(img.width * k), height: Math.round(img.height * k) });
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    for (const [type, q] of [['image/webp', .9], ['image/png'], ['image/jpeg', .85]]) {
+      const url = c.toDataURL(type, q);
+      if (url.startsWith('data:' + type) && url.length <= 273100) { URL.revokeObjectURL(img.src); return url; }
+    }
+  }
+  throw new Error('تعذّر ضغط الشعار إلى أقل من 200KB، جرّب صورة أبسط');
+}
+
+async function viewSettings() {
+  const s = await rpc('admin_get_settings');
+  let logo = s.logo_data;                                   // undefined = بدون تغيير لاحقاً
+  let logoChanged = false;
+  const val = (id, v, props = {}) => h('input', { class: 'input', id, value: v ?? '', ...props });
+  const sw = (id, label, on, hint) => h('label', { class: 'switch' }, h('input', { type: 'checkbox', id, checked: !!on }), h('span', null, label, hint ? h('div', { class: 'hint' }, hint) : null));
+  const preview = h('img', { src: logo || 'logo.png', style: { width: '84px', height: '84px', objectFit: 'contain', background: '#fff', border: '1px solid var(--line)', borderRadius: '14px', padding: '4px' } });
+  const file = h('input', { type: 'file', accept: 'image/*', class: 'hide', onchange: wrapFail(async () => {
+    if (!file.files[0]) return; logo = await compressLogo(file.files[0]); logoChanged = true; preview.src = logo; toast(`تم ضغط الشعار (${Math.round(logo.length * .75 / 1024)}KB)`, 'ok');
+  }) });
+  const color = h('input', { type: 'color', id: 'primary_color', value: s.primary_color, style: { width: '60px', height: '46px', border: '2px solid var(--line)', borderRadius: '10px', padding: '2px', background: '#fff' } });
+  const g = id => $('#' + id);
+
+  const save = btnAct('حفظ الإعدادات', 'block', wrapFail(async () => {
+    const p = {
+      campaign_name: g('campaign_name').value, primary_color: color.value,
+      starts_at: fromLocalInput(g('starts_at').value), ends_at: fromLocalInput(g('ends_at').value),
+      self_register: g('self_register').checked, show_score: g('show_score').checked, show_correct: g('show_correct').checked,
+      leaderboard_size: +g('leaderboard_size').value || 10, base_points: +g('base_points').value || 0, speed_bonus: +g('speed_bonus').value || 0,
+      default_seconds: +g('default_seconds').value || 20, questions_per_attempt: g('questions_per_attempt').value ? +g('questions_per_attempt').value : null,
+      test_mode: g('test_mode').checked,
+    };
+    if (logoChanged) p.logo_data = logo || '';
+    await rpc('admin_save_settings', { p });
+    store.del('kq_logo'); await loadConfig(); toast('تم حفظ الإعدادات', 'ok'); adminBoot();
+  }));
+
+  const sched = [['starts_at', 'وقت بداية المسابقة (اختياري)'], ['ends_at', 'وقت نهاية المسابقة (اختياري)']].map(([id, l]) =>
+    h('div', { class: 'field' }, h('label', null, l), h('input', { class: 'input ltr', id, type: 'datetime-local', value: toLocalInput(s[id]) })));
+  const schedBtn = btnAct('تفعيل الجدولة (فتح تلقائي بالموعد)', 'ghost block', wrapFail(async () => {
+    await save.onclick?.(); await rpc('admin_set_status', { p_status: 'open', p_keep_schedule: true }); toast('تم تفعيل الجدولة', 'ok'); adminBoot();
+  }));
+
+  body(
+    h('div', { class: 'card' }, h('h3', null, 'الهوية'),
+      h('div', { class: 'field' }, h('label', null, 'اسم الحملة'), val('campaign_name', s.campaign_name, { maxlength: 60 })),
+      h('div', { class: 'row', style: { alignItems: 'flex-end' } }, h('div', null, h('label', { class: 'bold small' }, 'الشعار'), h('div', null, preview)),
+        h('div', { class: 'row' }, h('button', { class: 'btn sm', onclick: () => file.click() }, 'رفع شعار'), file,
+          h('button', { class: 'btn sm ghost', onclick: () => { logo = ''; logoChanged = true; preview.src = 'logo.png'; } }, 'الشعار الافتراضي')),
+        h('div', null, h('label', { class: 'bold small' }, 'اللون الرئيسي'), h('div', null, color))),
+      h('p', { class: 'hint' }, 'يُضغط الشعار تلقائياً في المتصفح ويُحفظ بحد أقصى 200KB.')),
+    h('div', { class: 'card' }, h('h3', null, 'موعد المسابقة'), h('div', { class: 'row' }, sched.map(x => h('div', { class: 'grow', style: { minWidth: '220px' } }, x))),
+      h('p', { class: 'hint' }, 'المواعيد بتوقيت السعودية. للفتح اليدوي استخدم أزرار «فتح/إنهاء» في الصفحة الرئيسية.'), schedBtn),
+    h('div', { class: 'card' }, h('h3', null, 'خيارات المشارك'),
+      sw('self_register', 'السماح بالتسجيل الذاتي', s.self_register, 'إذا أُغلق يظهر لغير المسجلين: «رقمك غير مسجل، تواصل مع مشرف الحملة»'),
+      sw('show_score', 'إظهار النقاط للمشترك بعد إنهائه', s.show_score, 'الترتيب لا يظهر إلا بعد نشر النتائج'),
+      sw('show_correct', 'إظهار صح/خطأ أثناء المسابقة', s.show_correct, 'غير مستحسن في الباصات: قد يمرّر المشاركون الإجابات لبعضهم'),
+      h('div', { class: 'field mt' }, h('label', null, 'عدد المتصدرين المعروضين'), val('leaderboard_size', s.leaderboard_size, { type: 'number', min: 3, max: 100 }))),
+    h('div', { class: 'card' }, h('h3', null, 'النقاط والوقت'), h('div', { class: 'row' },
+      [['base_points', 'نقاط الإجابة الصحيحة', s.base_points], ['speed_bonus', 'أقصى مكافأة سرعة', s.speed_bonus], ['default_seconds', 'وقت السؤال (ثانية)', s.default_seconds]]
+        .map(([id, l, v]) => h('div', { class: 'field grow', style: { minWidth: '150px' } }, h('label', null, l), val(id, v, { type: 'number', min: 0 }))),
+      h('div', { class: 'field grow', style: { minWidth: '150px' } }, h('label', null, 'عدد الأسئلة لكل محاولة'), val('questions_per_attempt', s.questions_per_attempt, { type: 'number', min: 1, placeholder: 'الكل' }))),
+      h('p', { class: 'hint' }, 'المكافأة تتناسب مع الوقت المتبقي. ما سبق قيم افتراضية؛ ولكل سؤال نقاط ووقت خاص اختياري. التغيير لا يؤثر على محاولات بدأت بالفعل.')),
+    h('div', { class: 'card' }, h('h3', null, '🧪 أدوات الأمان والتجربة'),
+      sw('test_mode', 'وضع التجربة', s.test_mode, 'يسمح بتجربة المسابقة قبل الفتح (وهي مسودة). كل المشاركات فيه تجريبية وتُحذف بزر الحذف أدناه ولا تلوّث النتائج.'),
+      h('div', { class: 'row mt' }, btnAct('حذف بيانات التجربة', 'danger', wrapFail(async () => {
+        if (!(await confirmDlg({ title: 'حذف بيانات التجربة؟', text: 'ستُحذف كل المحاولات التجريبية والمشتركون المسجَّلون ذاتياً أثناء التجربة. المشتركون الحقيقيون وأسئلتك لا تُمس.', ok: 'متابعة', danger: true }))) return;
+        if (!(await confirmDlg({ title: 'تأكيد نهائي', text: 'هذا الإجراء لا يمكن التراجع عنه.', ok: 'احذف نهائياً', danger: true, requireText: 'حذف' }))) return;
+        const r = await rpc('admin_delete_test_data'); toast(`حُذف ${r.attempts} محاولة و${r.participants} مسجَّل تجريبي`, 'ok'); adminBoot();
+      })), DEMO ? h('button', { class: 'btn ghost', onclick: async () => { if (await confirmDlg({ title: 'إعادة ضبط الوضع التجريبي؟', text: 'تُمسح كل البيانات المحلية وتعود البيانات التجريبية الأصلية.', danger: true })) { backend.reset(); store.del(SESS); store.del(PEND); location.reload(); } } }, 'إعادة ضبط كل شيء (تجريبي)') : null),
+      h('div', { class: 'row mt' }, btnAct('إعادة تصحيح الإجابات', 'ghost', wrapFail(async () => {
+        if (!(await confirmDlg({ title: 'إعادة التصحيح؟', text: 'تُعاد معاينة كل الإجابات المسجلة على مفاتيح الإجابة الحالية وتُحدَّث النقاط. استخدمها فقط بعد تصحيح إجابة خاطئة في سؤال.', ok: 'تصحيح' }))) return;
+        const r = await rpc('admin_regrade'); toast(`أُعيد تصحيح ${r.regraded} إجابة`, 'ok');
+      })))),
+    save,
+  );
+}
+
+/* =====================================================================
+   المشرف: ملفات Excel/CSV (أدوات مشتركة)
+   ===================================================================== */
+async function readTable(file) {
+  const X = await loadXLSX();
+  const isText = /\.(csv|txt|tsv)$/i.test(file.name);
+  const wb = isText ? X.read(await file.text(), { type: 'string' }) : X.read(await file.arrayBuffer(), { type: 'array' });
+  return X.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, defval: '', blankrows: false }).map(r => r.map(c => String(c ?? '').trim()));
+}
+async function saveXlsx(name, sheet, headers, rows) {
+  const X = await loadXLSX(), ws = X.utils.aoa_to_sheet([headers, ...rows]), wb = X.utils.book_new();
+  ws['!cols'] = headers.map(() => ({ wch: 22 })); wb.Workbook = { Views: [{ RTL: true }] };
+  X.utils.book_append_sheet(wb, ws, sheet); X.writeFile(wb, name);
+}
+const normHdr = c => toLatinDigits(c).trim().toLowerCase().replace(/[ً-ْـ]/g, '').replace(/[أإآ]/g, 'ا');
+const hdrFind = (hdr, ...keys) => hdr.findIndex(c => keys.some(k => c.includes(normHdr(k))));
+const pickFile = accept => new Promise(res => { const i = h('input', { type: 'file', accept }); i.onchange = () => res(i.files[0] || null); i.click(); });
+const tbl = (heads, rows, cls = '') => h('div', { class: 'tblw ' + cls }, h('table', { class: 'tbl' }, h('thead', null, h('tr', null, heads.map(x => h('th', null, x)))), h('tbody', null, rows)));
+
+/* =====================================================================
+   الأسئلة
+   ===================================================================== */
+const CAT_AR = { 'فقهي': 'fiqh', 'فقه': 'fiqh', 'fiqh': 'fiqh', 'ثقافي': 'culture', 'ثقافة': 'culture', 'culture': 'culture', 'أخرى': 'other', 'اخرى': 'other', 'other': 'other' };
+const LET_IDX = { 'أ': 0, 'ا': 0, 'a': 0, 'ب': 1, 'b': 1, 'ج': 2, 'c': 2, 'د': 3, 'd': 3, 'ه': 4, 'هـ': 4, 'e': 4, 'و': 5, 'f': 5 };
+
+// تحديد فهرس الإجابة الصحيحة من (رقم / حرف / نص الاختيار)
+function resolveCorrect(spec, opts) {
+  const s = toLatinDigits(spec).trim(); if (!s) return -1;
+  if (/^\d$/.test(s) && +s >= 1 && +s <= opts.length) return +s - 1;
+  const l = s.toLowerCase().replace(/[\s.)\-:]/g, '');
+  if (l in LET_IDX && LET_IDX[l] < opts.length) return LET_IDX[l];
+  return opts.findIndex(o => o.trim() === s);
+}
+function checkQ(q) {
+  if ((q.text || '').trim().length < 3) return 'نص السؤال ناقص';
+  if (q.options.length < 2) return 'يلزم اختياران على الأقل';
+  if (q.options.length > 6) return 'الحد الأقصى 6 اختيارات';
+  if (new Set(q.options.map(o => o.trim().toLowerCase())).size !== q.options.length) return 'اختيارات مكررة';
+  if (q.correct_index < 0) return 'الإجابة الصحيحة غير محددة أو لا تطابق أي اختيار';
+  return '';
+}
+function questionsFromTable(aoa) {
+  const hdr = aoa[0].map(normHdr), iq = hdrFind(hdr, 'سؤال', 'question');
+  if (iq < 0) throw new Error('الصف الأول يجب أن يحتوي عناوين الأعمدة (السؤال، الاختيار 1، ...، الإجابة الصحيحة). حمّل النموذج للمساعدة.');
+  const iAns = hdrFind(hdr, 'صحيح', 'correct', 'answer'), iCat = hdrFind(hdr, 'تصنيف', 'category', 'نوع'), iExp = hdrFind(hdr, 'شرح', 'explanation', 'توضيح'),
+    iPts = hdrFind(hdr, 'نقاط', 'points'), iSec = hdrFind(hdr, 'وقت', 'ثوان', 'seconds', 'time');
+  const optCols = hdr.map((c, i) => (/^(اختيار|خيار|option|choice)/.test(c) || /^[a-f]$/.test(c) || ['ا', 'ب', 'ج', 'د', 'ه', 'و'].includes(c)) && i !== iAns ? i : -1).filter(i => i >= 0);
+  return aoa.slice(1).map((r, n) => {
+    const options = optCols.map(i => r[i]).filter(x => x !== '' && x != null);
+    return mkQ(n + 2, r[iq], CAT_AR[normHdr(r[iCat] || '')] || 'fiqh', options, iAns >= 0 ? r[iAns] : '', iExp >= 0 ? r[iExp] : '', iPts >= 0 ? r[iPts] : '', iSec >= 0 ? r[iSec] : '');
+  }).filter(q => q.text || q.options.length);
+}
+function mkQ(row, text, category, options, ans, explanation, points, seconds) {
+  const q = { _row: row, text: String(text || '').trim(), category, options: options.map(o => String(o).trim()), explanation: String(explanation || '').trim(),
+    points: points === '' ? null : (+toLatinDigits(points) || null), seconds: seconds === '' ? null : (+toLatinDigits(seconds) || null) };
+  q.correct_index = resolveCorrect(ans, q.options); q.error = checkQ(q); return q;
+}
+// لصق نصي: كتل مفصولة بسطر فارغ. السطر الأول سؤال، ثم اختيارات (أ) ب) ... أو - ...)، والصحيح بعلامة * أو سطر «الإجابة: ب»
+function questionsFromText(txt) {
+  return toLatinDigits(txt).replace(/\r/g, '').split(/\n\s*\n/).map(b => b.split('\n').map(l => l.trim()).filter(Boolean)).filter(b => b.length).map((lines, n) => {
+    let text = lines[0].replace(/^\d+\s*[.)\-–]\s*/, ''), cat = 'fiqh', ans = '', exp = ''; const opts = []; let star = -1;
+    lines.slice(1).forEach(l => {
+      let m;
+      if ((m = l.match(/^(?:الإجابة|الاجابة|الصحيح|answer)[^:：]*[:：]\s*(.+)$/i))) ans = m[1];
+      else if ((m = l.match(/^(?:الشرح|التوضيح|explanation)\s*[:：]\s*(.+)$/i))) exp = m[1];
+      else if ((m = l.match(/^(?:التصنيف|category)\s*[:：]\s*(.+)$/i))) cat = CAT_AR[normHdr(m[1])] || 'fiqh';
+      else {
+        const o = l.match(/^(?:[*✓✔]\s*)?(?:[أابجدهـوa-f]|\d)\s*[).\-–:]\s*(.+)$/i) || l.match(/^(?:[*✓✔]\s*)?[-•*]\s*(.+)$/);
+        if (o) { let t = o[1].trim(); const marked = /^[*✓✔]/.test(l) || /[*✓✔]$/.test(t) || /\((?:صح|صحيح)\)$/.test(t); t = t.replace(/\s*(?:[*✓✔]|\((?:صح|صحيح)\))$/, '').trim(); if (marked) star = opts.length; opts.push(t); }
+        else if (!opts.length) text += ' ' + l;
+      }
+    });
+    const q = mkQ(n + 1, text, cat, opts, ans, exp, '', ''); if (star >= 0 && q.correct_index < 0) { q.correct_index = star; q.error = checkQ(q); } return q;
+  });
+}
+
+async function viewQuestions() {
+  let list = await rpc('admin_list_questions'), fcat = '', fq = '';
+  const holder = h('div');
+  const draw = () => {
+    const f = list.filter(q => (!fcat || q.category === fcat) && (!fq || q.text.includes(fq)));
+    mount(holder, f.length ? f.map(q => h('div', { class: 'qcard' + (q.active ? '' : ' off') },
+      h('div', { class: 'row sp' }, h('div', { class: 'bold grow' }, q.text), h('div', { class: 'row' }, h('span', { class: 'chip gold' }, CATS[q.category]),
+        !q.active ? h('span', { class: 'chip gray' }, 'معطّل') : null, q.points != null ? h('span', { class: 'chip' }, q.points + ' نقطة') : null, q.seconds != null ? h('span', { class: 'chip' }, q.seconds + ' ث') : null)),
+      h('ol', null, q.options.map(o => h('li', { class: o.id === q.correct_option_id ? 'right' : '' }, o.text, o.id === q.correct_option_id ? ' ✓' : ''))),
+      q.explanation ? h('div', { class: 'hint' }, 'الشرح: ' + q.explanation) : null,
+      h('div', { class: 'row mt' }, h('button', { class: 'btn sm', onclick: () => questionEditor(q) }, 'تعديل'),
+        h('button', { class: 'btn sm ghost', onclick: () => questionEditor({ ...q, id: null, has_attempts: false, options: q.options.map(o => ({ id: null, text: o.text })), correct_option_id: null, _dupIdx: q.options.findIndex(o => o.id === q.correct_option_id), text: q.text }) }, 'نسخ'),
+        h('button', { class: 'btn sm ghost', onclick: () => previewQuestion(q) }, 'معاينة'),
+        btnAct(q.active ? 'تعطيل' : 'تفعيل', 'sm ghost', wrapFail(async () => { await rpc('admin_set_question_active', { p_id: q.id, p_active: !q.active }); q.active = !q.active; draw(); })),
+        btnAct('حذف', 'sm danger', wrapFail(async () => {
+          if (!(await confirmDlg({ title: 'حذف السؤال؟', text: q.text, ok: 'حذف', danger: true }))) return;
+          await rpc('admin_delete_question', { p_id: q.id }); list = list.filter(x => x.id !== q.id); draw(); toast('تم الحذف', 'ok');
+        }))))) : h('p', { class: 'muted center' }, 'لا توجد أسئلة مطابقة.'));
+    cnt.textContent = `${list.length} سؤال (${list.filter(q => q.active).length} مفعّل)`;
+  };
+  const cnt = h('span', { class: 'chip' });
+  const reload = async () => { list = await rpc('admin_list_questions'); draw(); };
+  body(h('div', { class: 'toolbar' }, h('button', { class: 'btn', onclick: () => questionEditor(null) }, '+ سؤال جديد'), h('button', { class: 'btn gold', onclick: () => importQuestions() }, 'استيراد'),
+    btnAct('تصدير', 'ghost', wrapFail(async () => {
+      await saveXlsx('أسئلة-المسابقة.xlsx', 'الأسئلة', ['السؤال', 'التصنيف', 'الاختيار 1', 'الاختيار 2', 'الاختيار 3', 'الاختيار 4', 'الاختيار 5', 'الاختيار 6', 'الإجابة الصحيحة', 'الشرح', 'النقاط', 'الوقت (ثانية)', 'الحالة'],
+        list.map(q => [q.text, CATS[q.category], ...[0, 1, 2, 3, 4, 5].map(i => q.options[i]?.text ?? ''), q.options.findIndex(o => o.id === q.correct_option_id) + 1, q.explanation ?? '', q.points ?? '', q.seconds ?? '', q.active ? 'مفعّل' : 'معطّل']));
+    })), cnt),
+    h('div', { class: 'toolbar' }, h('input', { class: 'input', placeholder: 'بحث في الأسئلة', oninput: e => { fq = e.target.value.trim(); draw(); } }),
+      h('select', { class: 'input', onchange: e => { fcat = e.target.value; draw(); } }, h('option', { value: '' }, 'كل التصنيفات'), Object.entries(CATS).map(([k, l]) => h('option', { value: k }, l)))), holder);
+  draw();
+
+  /* ---- نافذة إضافة/تعديل ---- */
+  function questionEditor(q) {
+    const text = h('textarea', { class: 'input', value: q?.text ?? '', placeholder: 'نص السؤال' });
+    const cat = h('select', { class: 'input' }, Object.entries(CATS).map(([k, l]) => h('option', { value: k, selected: (q?.category || 'fiqh') === k }, l)));
+    const rows = (q?.options ?? [{}, {}, {}, {}]).map(o => ({ id: o.id, text: o.text ?? '' }));
+    let correct = q?.id ? Math.max(0, q.options.findIndex(o => o.id === q.correct_option_id)) : (q?._dupIdx ?? 0);
+    const locked = !!q?.has_attempts, optBox = h('div'), addBtn = h('button', { class: 'btn sm ghost', onclick: () => { rows.push({ text: '' }); drawOpts(); } }, '+ اختيار');
+    const drawOpts = () => {
+      mount(optBox, ...rows.map((r, i) => h('div', { class: 'optrow' }, h('input', { type: 'radio', name: 'corr', checked: i === correct, onchange: () => { correct = i; }, title: 'الإجابة الصحيحة' }),
+        h('input', { class: 'input grow', value: r.text, placeholder: `الاختيار ${i + 1}`, oninput: e => { r.text = e.target.value; } }),
+        rows.length > 2 && !locked ? h('button', { class: 'btn sm ghost', onclick: () => { rows.splice(i, 1); if (correct >= rows.length) correct = rows.length - 1; else if (correct > i) correct--; drawOpts(); } }, '✕') : null)));
+      addBtn.classList.toggle('hide', rows.length >= 6 || locked);
+    };
+    drawOpts();
+    const expl = h('textarea', { class: 'input', value: q?.explanation ?? '', placeholder: 'يظهر للمشترك في مراجعة الإجابات بعد نشر النتائج' });
+    const pts = h('input', { class: 'input', type: 'number', min: 0, value: q?.points ?? '', placeholder: 'افتراضي' }), sec = h('input', { class: 'input', type: 'number', min: 5, max: 300, value: q?.seconds ?? '', placeholder: 'افتراضي' });
+    const act = h('input', { type: 'checkbox', checked: q?.active ?? true }), out = h('div');
+    const m = modal([h('h3', null, q?.id ? 'تعديل السؤال' : 'سؤال جديد'), locked ? alertEl('warn', 'بدأت إجابات حقيقية على هذا السؤال: يمكنك تعديل النصوص والإجابة الصحيحة فقط (ثم أعد التصحيح من الإعدادات).') : null,
+      h('div', { class: 'field' }, h('label', null, 'نص السؤال'), text), h('div', { class: 'field' }, h('label', null, 'التصنيف'), cat),
+      h('div', { class: 'field' }, h('label', null, 'الاختيارات (حدد الدائرة بجانب الإجابة الصحيحة)'), optBox, addBtn),
+      h('div', { class: 'field mt' }, h('label', null, 'شرح الإجابة (اختياري)'), expl),
+      h('div', { class: 'row' }, h('div', { class: 'field grow' }, h('label', null, 'نقاط خاصة (اختياري)'), pts), h('div', { class: 'field grow' }, h('label', null, 'وقت خاص بالثواني (اختياري)'), sec)),
+      h('label', { class: 'switch' }, act, h('span', null, 'السؤال مفعّل')), out,
+      h('div', { class: 'row mt' }, btnAct('حفظ', '', async () => {
+        out.replaceChildren();
+        try {
+          const r = await rpc('admin_save_question', { p: { id: q?.id || undefined, text: text.value, category: cat.value, options: rows.map(o => ({ id: o.id || undefined, text: o.text })), correct_index: correct,
+            explanation: expl.value, points: pts.value === '' ? null : +pts.value, seconds: sec.value === '' ? null : +sec.value, active: act.checked } });
+          m.close(); toast(r.has_attempts ? 'تم الحفظ — أعد تصحيح الإجابات من الإعدادات إذا غيّرت الإجابة الصحيحة' : 'تم حفظ السؤال', 'ok'); reload();
+        } catch (e) { out.append(alertEl('err', errMsg(e))); }
+      }), h('button', { class: 'btn ghost', onclick: () => previewQuestion({ text: text.value || '…', category: cat.value, options: rows.map((o, i) => ({ id: i, text: o.text || '…' })), correct_option_id: correct }) }, 'معاينة'),
+        h('button', { class: 'btn ghost', onclick: () => m.close() }, 'إلغاء'))], { big: true, dismiss: false });
+  }
+
+  /* ---- معاينة كما يراها المشترك ---- */
+  function previewQuestion(q) {
+    const m = modal([h('div', { class: 'small muted mb' }, 'هكذا يظهر السؤال للمشترك (الاختيارات تُخلط عشوائياً لكل مشترك)'),
+      h('div', { class: 'prog' }, h('span', null, 'السؤال 1 من 8'), h('div', { class: 'bar' }, h('i', { style: { width: '12%' } }))),
+      h('div', { class: 'timer row' }, h('div', { class: 'bar grow' }, h('i', { style: { width: '70%' } })), h('div', { class: 'secs num' }, q.seconds ?? 20)),
+      h('div', { class: 'card' }, h('div', { class: 'qcat' }, h('span', { class: 'chip gold' }, CATS[q.category])), h('div', { class: 'qtext' }, q.text),
+        h('div', { class: 'opts' }, q.options.map((o, i) => h('div', { class: 'opt' }, h('span', { class: 'k' }, LETTERS[i]), h('span', { class: 'grow' }, o.text))))),
+      h('button', { class: 'btn ghost block', onclick: () => m.close() }, 'إغلاق')]);
+  }
+
+  /* ---- استيراد (ملف أو لصق) ---- */
+  function importQuestions() {
+    let parsed = [];
+    const out = h('div'), txt = h('textarea', { class: 'input', style: { minHeight: '150px' }, placeholder: 'ما ميقات أهل المدينة؟\nأ) ذو الحليفة *\nب) الجحفة\nج) يلملم\nالشرح: ...\n\nالسؤال التالي…' });
+    const show = () => {
+      const ok = parsed.filter(q => !q.error);
+      mount(out, tbl(['#', 'السؤال', 'الاختيارات', 'الحالة'], parsed.map(q => h('tr', null, h('td', { class: 'num' }, q._row), h('td', null, q.text), h('td', { class: 'small' }, q.options.map((o, i) => (i === q.correct_index ? '✓ ' : '') + o).join(' | ')),
+        h('td', null, q.error ? h('span', { class: 'chip bad' }, q.error) : h('span', { class: 'chip ok' }, 'جاهز')))), 'mt'),
+        h('div', { class: 'row mt' }, btnAct(`استيراد ${ok.length} سؤال`, '', async () => {
+          if (!ok.length) return toast('لا توجد أسئلة صالحة', 'err');
+          try {
+            const r = await rpc('admin_import_questions', { p_rows: ok.map(q => ({ _row: q._row, text: q.text, category: q.category, options: q.options, correct_index: q.correct_index, explanation: q.explanation, points: q.points, seconds: q.seconds })) });
+            m.close(); toast(`أُضيف ${r.inserted} سؤال${r.skipped ? ` — تخطي ${r.skipped} مكرر` : ''}${r.errors.length ? ` — ${r.errors.length} خطأ` : ''}`, r.errors.length ? 'err' : 'ok'); reload();
+          } catch (e) { toast(errMsg(e), 'err'); }
+        })));
+    };
+    const m = modal([h('h3', null, 'استيراد أسئلة'), h('div', { class: 'row mb' },
+      btnAct('اختيار ملف Excel / CSV', '', wrapFail(async () => { const f = await pickFile('.xlsx,.xls,.csv,.txt'); if (!f) return; const t = await readTable(f); if (!t.length) throw new Error('الملف فارغ'); parsed = questionsFromTable(t); show(); })),
+      btnAct('تحميل نموذج', 'ghost', wrapFail(() => saveXlsx('نموذج-أسئلة.xlsx', 'الأسئلة', ['السؤال', 'التصنيف', 'الاختيار 1', 'الاختيار 2', 'الاختيار 3', 'الاختيار 4', 'الإجابة الصحيحة', 'الشرح', 'النقاط', 'الوقت (ثانية)'],
+        [['ما ميقات أهل المدينة؟', 'فقهي', 'ذو الحليفة', 'الجحفة', 'يلملم', 'قرن المنازل', 1, 'ميقات أهل المدينة ذو الحليفة', '', ''], ['في أي جبل غار حراء؟', 'ثقافي', 'ثور', 'النور', 'أحد', 'أبو قبيس', 'النور', '', 150, 15]]))),
+      ),
+    h('p', { class: 'hint' }, 'الإجابة الصحيحة: رقم الاختيار (1-6) أو حرفه (أ ب ج د) أو نصه. التصنيف: فقهي / ثقافي / أخرى.'),
+    h('div', { class: 'field mt' }, h('label', null, 'أو الصق الأسئلة هنا'), txt, h('div', { class: 'hint' }, 'افصل بين الأسئلة بسطر فارغ. علّم الصحيح بـ * أو اكتب سطر «الإجابة: ب».')),
+    h('button', { class: 'btn sm', onclick: () => { parsed = questionsFromText(txt.value); parsed.length ? show() : toast('لا يوجد نص', 'err'); } }, 'تحليل النص'), out,
+    h('button', { class: 'btn ghost block mt', onclick: () => m.close() }, 'إغلاق')], { big: true, dismiss: false });
+  }
+}
+
+/* =====================================================================
+   الباصات
+   ===================================================================== */
+async function viewBuses() {
+  const holder = h('div');
+  const draw = async () => {
+    const list = await rpc('admin_list_buses');
+    mount(holder, tbl(['الباص', 'عدد المشتركين', ''], list.length ? list.map(b => h('tr', null, h('td', { class: 'bold' }, busLabel(b.name)), h('td', { class: 'num' }, b.participants),
+      h('td', { class: 'act' }, h('button', { class: 'btn sm ghost', onclick: () => editBus(b) }, 'تعديل'), ' ',
+        btnAct('حذف', 'sm danger', wrapFail(async () => { if (!(await confirmDlg({ title: 'حذف الباص؟', text: b.participants ? `${b.participants} مشترك سيصبحون «بدون باص».` : busLabel(b.name), ok: 'حذف', danger: true }))) return; await rpc('admin_delete_bus', { p_id: b.id }); draw(); }))))) : h('tr', null, h('td', { colspan: 3, class: 'center muted' }, 'لا توجد باصات'))));
+  };
+  function editBus(b) {
+    const inp = h('input', { class: 'input', value: b?.name ?? '', placeholder: 'رقم أو اسم الباص (مثال: 5 أو باص النخبة)', maxlength: 40 }), out = h('div');
+    const m = modal([h('h3', null, b ? 'تعديل الباص' : 'باص جديد'), h('div', { class: 'field' }, inp), out, h('div', { class: 'row' }, btnAct('حفظ', '', async () => {
+      try { await rpc('admin_save_bus', { p_id: b?.id ?? null, p_name: inp.value }); m.close(); draw(); } catch (e) { mount(out, alertEl('err', errMsg(e))); }
+    }), h('button', { class: 'btn ghost', onclick: () => m.close() }, 'إلغاء'))]); inp.focus();
+  }
+  const from = h('input', { class: 'input', type: 'number', min: 1, placeholder: 'من', style: { width: '90px' } }), to = h('input', { class: 'input', type: 'number', min: 1, placeholder: 'إلى', style: { width: '90px' } });
+  body(h('div', { class: 'toolbar' }, h('button', { class: 'btn', onclick: () => editBus(null) }, '+ باص جديد'),
+    h('div', { class: 'row' }, from, to, btnAct('إضافة نطاق أرقام', 'ghost', wrapFail(async () => {
+      const a = +from.value, z = +to.value; if (!a || !z || z < a || z - a > 100) return toast('نطاق غير صالح (حتى 100 باص)', 'err');
+      const have = new Set((await rpc('admin_list_buses')).map(b => b.name)); let n = 0;
+      for (let i = a; i <= z; i++) if (!have.has(String(i))) { await rpc('admin_save_bus', { p_id: null, p_name: String(i) }); n++; }
+      toast(`أُضيف ${n} باص`, 'ok'); draw();
+    })))), h('div', { class: 'card' }, holder), h('p', { class: 'hint' }, 'تُنشأ الباصات تلقائياً أيضاً عند استيراد المشتركين من ملف Excel.'));
+  await draw();
+}
+
+/* =====================================================================
+   المشتركون
+   ===================================================================== */
+async function viewParticipants() {
+  let list = await rpc('admin_list_participants'), buses = await rpc('admin_list_buses');
+  const F = { q: '', bus: '', g: '', st: '' }, LIMIT = 200; let all = false;
+  const holder = h('div'), cnt = h('span', { class: 'chip' });
+  const ST = { none: ['لم يشارك', 'gray'], in_progress: ['جارٍ', 'gold'], finished: ['شارك', 'ok'] };
+  const filtered = () => list.filter(p => (!F.q || p.name.includes(F.q) || p.phone.includes(toLatinDigits(F.q).replace(/^0/, '')))
+    && (!F.bus || (F.bus === '-' ? p.bus_id == null : String(p.bus_id) === F.bus)) && (!F.g || p.gender === F.g) && (!F.st || (F.st === 'done' ? p.status !== 'none' : p.status === F.st)));
+  const draw = () => {
+    const f = filtered(), shown = all ? f : f.slice(0, LIMIT);
+    cnt.textContent = `${f.length} من ${list.length}`;
+    mount(holder, tbl(['الاسم', 'الجوال', 'الجنس', 'الباص', 'الحالة', 'النقاط', ''], shown.length ? shown.map(p => h('tr', null,
+      h('td', { class: 'bold' }, p.name, p.is_test ? h('span', { class: 'chip bad', style: { marginInlineStart: '6px' } }, 'تجريبي') : null), h('td', { class: 'num' }, phoneShow(p.phone)), h('td', null, genderLabel(p.gender)), h('td', null, busLabel(p.bus_name)),
+      h('td', null, h('span', { class: 'chip ' + ST[p.status][1] }, ST[p.status][0])), h('td', { class: 'num' }, p.points ?? '—'),
+      h('td', { class: 'act' }, h('button', { class: 'btn sm ghost', onclick: () => editP(p) }, 'تعديل'), ' ',
+        btnAct('حذف', 'sm danger', wrapFail(async () => { if (!(await confirmDlg({ title: 'حذف المشترك؟', text: `${p.name} — ${phoneShow(p.phone)}` + (p.status !== 'none' ? ' (ستُحذف مشاركته أيضاً)' : ''), ok: 'حذف', danger: true }))) return; await rpc('admin_delete_participant', { p_id: p.id }); list = list.filter(x => x.id !== p.id); draw(); }))))) : h('tr', null, h('td', { colspan: 7, class: 'center muted' }, 'لا يوجد مشتركون مطابقون'))),
+      !all && f.length > LIMIT ? h('button', { class: 'btn ghost block mt', onclick: () => { all = true; draw(); } }, `عرض الكل (${f.length})`) : null);
+  };
+  const reload = async () => { [list, buses] = await Promise.all([rpc('admin_list_participants'), rpc('admin_list_buses')]); draw(); };
+  const sel = (key, opts) => h('select', { class: 'input', onchange: e => { F[key] = e.target.value; all = false; draw(); } }, opts.map(([v, l]) => h('option', { value: v }, l)));
+
+  function editP(p) {
+    const name = h('input', { class: 'input', value: p?.name ?? '', placeholder: 'الاسم' }), ph = h('input', { class: 'input ltr', value: p ? phoneShow(p.phone) : '', placeholder: '05xxxxxxxx', type: 'tel' });
+    const gen = g => h('label', null, h('input', { type: 'radio', name: 'pg', value: g, checked: p?.gender === g }), h('span', null, g === 'M' ? 'رجل' : 'امرأة'));
+    const bus = h('select', { class: 'input' }, h('option', { value: '' }, 'بدون باص'), buses.map(b => h('option', { value: b.id, selected: p?.bus_id === b.id }, busLabel(b.name)))), out = h('div');
+    const m = modal([h('h3', null, p ? 'تعديل مشترك' : 'مشترك جديد'), h('div', { class: 'field' }, h('label', null, 'الاسم'), name), h('div', { class: 'field' }, h('label', null, 'رقم الجوال'), ph),
+      h('div', { class: 'field' }, h('label', null, 'الجنس'), h('div', { class: 'seg' }, gen('M'), gen('F'))), h('div', { class: 'field' }, h('label', null, 'الباص'), bus), out,
+      h('div', { class: 'row' }, btnAct('حفظ', '', async () => {
+        try { await rpc('admin_save_participant', { p: { id: p?.id, name: name.value, phone: ph.value, gender: $('input[name=pg]:checked')?.value, bus_id: bus.value ? +bus.value : null } }); m.close(); toast('تم الحفظ', 'ok'); reload(); }
+        catch (e) { mount(out, alertEl('err', errMsg(e))); }
+      }), h('button', { class: 'btn ghost', onclick: () => m.close() }, 'إلغاء'))], { dismiss: false });
+  }
+
+  /* ---- استيراد المشتركين مع معاينة وكشف الأخطاء والتكرار ---- */
+  function importP() {
+    let rows = [], mode = 'skip'; const out = h('div');
+    const classify = existing => {
+      const seen = new Set();
+      rows.forEach(r => {
+        r.err = ''; r.dup = '';
+        if (!r.phoneN) r.err = 'رقم الجوال غير صحيح'; else if (r.name.length < 2) r.err = 'الاسم مطلوب'; else if (!r.g) r.err = 'الجنس غير معروف';
+        else if (seen.has(r.phoneN)) r.dup = 'مكرر في الملف'; else if (existing.has(r.phoneN)) r.dup = 'موجود مسبقاً';
+        seen.add(r.phoneN);
+      });
+    };
+    const show = () => {
+      const bad = rows.filter(r => r.err), dups = rows.filter(r => r.dup), good = rows.filter(r => !r.err), newBuses = [...new Set(good.map(r => r.bus).filter(b => b && !buses.some(x => x.name.toLowerCase() === b.toLowerCase())))];
+      mount(out, 
+        h('div', { class: 'stats mt' }, [[rows.length, 'إجمالي الصفوف'], [good.length - dups.length, 'جديد'], [dups.length, 'مكرر'], [bad.length, 'أخطاء']].map(([n, l]) => h('div', { class: 'stat' }, h('b', { class: 'num' }, n), h('span', null, l)))),
+        newBuses.length ? alertEl('info', `سيُنشأ ${newBuses.length} باص تلقائياً: ${newBuses.slice(0, 12).map(busLabel).join('، ')}${newBuses.length > 12 ? '…' : ''}`) : null,
+        dups.length ? h('div', { class: 'field' }, h('label', null, 'عند وجود رقم مكرر:'), h('div', { class: 'seg' }, [['skip', 'تخطي المكرر'], ['update', 'تحديث بياناته']].map(([v, l]) => h('label', null, h('input', { type: 'radio', name: 'dm', value: v, checked: mode === v, onchange: () => { mode = v; } }), h('span', null, l))))) : null,
+        tbl(['صف', 'الاسم', 'الجوال', 'الجنس', 'الباص', 'الحالة'], rows.slice(0, 300).map(r => h('tr', null, h('td', { class: 'num' }, r._row), h('td', null, r.name), h('td', { class: 'num' }, r.phoneN ? phoneShow(r.phoneN) : r.phone), h('td', null, genderLabel(r.g) || r.gRaw), h('td', null, r.bus ? busLabel(r.bus) : '—'),
+          h('td', null, r.err ? h('span', { class: 'chip bad' }, r.err) : r.dup ? h('span', { class: 'chip gold' }, r.dup) : h('span', { class: 'chip ok' }, 'جديد')))), 'mt'),
+        rows.length > 300 ? h('p', { class: 'hint' }, `تُعرض أول 300 صف فقط من ${rows.length}.`) : null,
+        h('div', { class: 'row mt' }, btnAct(`حفظ ${good.length} مشترك`, '', async () => {
+          if (!good.length) return toast('لا توجد صفوف صالحة', 'err');
+          const tot = { inserted: 0, updated: 0, skipped: 0, buses_created: 0, errors: [] };
+          try {
+            for (let i = 0; i < good.length; i += 200) {
+              const r = await rpcRetry('admin_import_participants', { p_rows: good.slice(i, i + 200).map(x => ({ _row: x._row, name: x.name, phone: x.phone, gender: x.gRaw, bus: x.bus })), p_mode: mode });
+              ['inserted', 'updated', 'skipped', 'buses_created'].forEach(k => { tot[k] += r[k]; }); tot.errors.push(...r.errors);
+            }
+          } catch (e) { return toast(errMsg(e), 'err'); }
+          m.close(); await reload();
+          toast(`أُضيف ${tot.inserted} · حُدّث ${tot.updated} · تُخطي ${tot.skipped}${tot.buses_created ? ` · باصات جديدة ${tot.buses_created}` : ''}${tot.errors.length ? ` · أخطاء ${tot.errors.length}` : ''}`, tot.errors.length ? 'err' : 'ok');
+        })));
+    };
+    const m = modal([h('h3', null, 'استيراد مشتركين'), h('p', { class: 'hint' }, 'أعمدة الملف: الاسم، الجوال، الجنس (ذكر/أنثى)، رقم الباص. الصف الأول عناوين الأعمدة.'),
+      h('div', { class: 'row' }, btnAct('اختيار ملف Excel / CSV', '', wrapFail(async () => {
+        const f = await pickFile('.xlsx,.xls,.csv,.txt'); if (!f) return; const t = await readTable(f); if (t.length < 1) throw new Error('الملف فارغ');
+        const hd = t[0].map(normHdr), iN = hdrFind(hd, 'اسم', 'name'), iP = hdrFind(hd, 'جوال', 'phone', 'mobile', 'هاتف', 'رقم'), iG = hdrFind(hd, 'جنس', 'gender', 'نوع'), iB = hdrFind(hd, 'باص', 'bus', 'حافلة');
+        const hasHdr = iN >= 0 && iP >= 0, map = hasHdr ? [iN, iP, iG, iB] : [0, 1, 2, 3], data = hasHdr ? t.slice(1) : t;
+        rows = data.map((r, i) => ({ _row: i + (hasHdr ? 2 : 1), name: (r[map[0]] || '').replace(/\s+/g, ' ').trim(), phone: r[map[1]] || '', gRaw: r[map[2]] || '', g: parseGender(r[map[2]]), bus: toLatinDigits(r[map[3]] || '').trim() }))
+          .filter(r => r.name || r.phone).map(r => ({ ...r, phoneN: normalizePhone(r.phone) }));
+        if (!rows.length) throw new Error('لا توجد صفوف في الملف');
+        classify(new Set(list.map(p => p.phone))); show();
+      })), btnAct('تحميل نموذج', 'ghost', wrapFail(() => saveXlsx('نموذج-مشتركين.xlsx', 'المشتركون', ['الاسم', 'الجوال', 'الجنس', 'رقم الباص'], [['أحمد محمد', '0501234567', 'ذكر', 1], ['سارة علي', '0507654321', 'أنثى', 2]])))),
+      out, h('button', { class: 'btn ghost block mt', onclick: () => m.close() }, 'إغلاق')], { big: true, dismiss: false });
+  }
+
+  body(h('div', { class: 'toolbar' }, h('button', { class: 'btn', onclick: () => editP(null) }, '+ إضافة'), h('button', { class: 'btn gold', onclick: importP }, 'استيراد Excel/CSV'),
+    btnAct('تصدير القائمة', 'ghost', wrapFail(() => saveXlsx('المشتركون.xlsx', 'المشتركون', ['الاسم', 'الجوال', 'الجنس', 'الباص', 'الحالة', 'النقاط'], filtered().map(p => [p.name, phoneShow(p.phone), genderLabel(p.gender), busLabel(p.bus_name), ST[p.status][0], p.points ?? ''])))), cnt),
+    h('div', { class: 'toolbar' }, h('input', { class: 'input', placeholder: 'بحث بالاسم أو الجوال', oninput: e => { F.q = e.target.value.trim(); all = false; draw(); } }),
+      sel('bus', [['', 'كل الباصات'], ...buses.map(b => [String(b.id), busLabel(b.name)]), ['-', 'بدون باص']]), sel('g', [['', 'الكل'], ['M', 'رجال'], ['F', 'نساء']]),
+      sel('st', [['', 'كل الحالات'], ['none', 'لم يشارك'], ['done', 'شارك (أو جارٍ)'], ['in_progress', 'جارٍ'], ['finished', 'أنهى']])),
+    h('div', { class: 'card' }, holder));
+  draw();
+}
+
+/* =====================================================================
+   النتائج + إعلان الفائزين
+   ===================================================================== */
+async function viewResults() {
+  const [rows, s] = await Promise.all([rpc('admin_results'), rpc('admin_get_settings')]);
+  const st = s.state, F = { q: '', g: '', bus: '', st: '' }, holder = h('div'), cnt = h('span', { class: 'chip' });
+  const buses = [...new Map(rows.map(r => [r.bus_id ?? '-', r.bus_name])).entries()];
+  const filtered = () => rows.filter(r => (!F.q || r.name.includes(F.q) || r.phone.includes(toLatinDigits(F.q).replace(/^0/, ''))) && (!F.g || r.gender === F.g) && (!F.bus || String(r.bus_id ?? '-') === F.bus) && (!F.st || r.status === F.st));
+  const draw = () => {
+    const f = filtered(); cnt.textContent = `${f.length} نتيجة`;
+    mount(holder, tbl(['الترتيب', 'الاسم', 'الجوال', 'الجنس', 'الباص', 'النقاط', 'الصحيح', 'الزمن', 'الحالة'], f.length ? f.map(r => h('tr', null,
+      h('td', { class: 'num bold' }, medal(r.rank)), h('td', { class: 'bold' }, r.name, r.is_test ? h('span', { class: 'chip bad', style: { marginInlineStart: '6px' } }, 'تجريبي') : null), h('td', { class: 'num' }, phoneShow(r.phone)),
+      h('td', null, genderLabel(r.gender)), h('td', null, busLabel(r.bus_name)), h('td', { class: 'num bold' }, fmtN(r.points)), h('td', { class: 'num' }, r.correct), h('td', { class: 'num' }, fmtSec(r.total_ms)),
+      h('td', null, h('span', { class: 'chip ' + (r.status === 'finished' ? 'ok' : 'gold') }, r.status === 'finished' ? 'أنهى' : 'جارٍ')))) : h('tr', null, h('td', { colspan: 9, class: 'center muted' }, 'لا توجد نتائج بعد')), 'print-area'));
+  };
+  const sel = (key, opts) => h('select', { class: 'input', onchange: e => { F[key] = e.target.value; draw(); } }, opts.map(([v, l]) => h('option', { value: v }, l)));
+  const act = (label, cls, fn, confirm) => btnAct(label, cls, wrapFail(async () => { if (confirm && !(await confirmDlg(confirm))) return; await fn(); adminBoot(); }));
+  const ctl = [];
+  if (st === 'closed') ctl.push(act('نشر النتائج', 'gold', () => rpc('admin_publish_results', { p_publish: true }), { title: 'نشر النتائج؟', text: 'سيرى كل مشترك ترتيبه وقائمة المتصدرين ويراجع إجاباته مع الإجابات الصحيحة.' + (rows.some(r => r.is_test) ? ' ⚠️ يوجد محاولات تجريبية بين النتائج!' : ''), ok: 'نشر' }));
+  if (st === 'published') ctl.push(act('إخفاء النتائج', 'ghost', () => rpc('admin_publish_results', { p_publish: false }), { title: 'إخفاء النتائج؟', text: 'لن يرى المشتركون الترتيب بعد الآن.', ok: 'إخفاء' }));
+  body(
+    h('div', { class: 'card noprint' }, h('div', { class: 'row sp' }, h('div', null, h('div', { class: 'muted small' }, 'الحالة'), stateChip(st)), h('div', { class: 'row' }, ctl,
+      h('button', { class: 'btn gold', onclick: () => winnersChooser(rows) }, '🏆 إعلان الفائزين'),
+      btnAct('تصدير Excel', 'ghost', wrapFail(() => saveXlsx('نتائج-المسابقة.xlsx', 'النتائج', ['الترتيب', 'الاسم', 'الجوال', 'الجنس', 'الباص', 'النقاط', 'الإجابات الصحيحة', 'الزمن (ثانية)', 'الحالة'],
+        filtered().map(r => [r.rank, r.name, phoneShow(r.phone), genderLabel(r.gender), busLabel(r.bus_name), r.points, r.correct, +(r.total_ms / 1000).toFixed(1), r.status === 'finished' ? 'أنهى' : 'جارٍ'])))),
+      h('button', { class: 'btn ghost', onclick: () => window.print() }, 'طباعة'))),
+      st === 'open' ? h('p', { class: 'hint' }, 'المسابقة مفتوحة: الأرقام مباشرة وقد تتغير. يمكن نشر النتائج بعد إنهاء المسابقة.') : st === 'draft' || st === 'scheduled' ? h('p', { class: 'hint' }, 'المسابقة لم تبدأ بعد.') : null),
+    h('div', { class: 'toolbar noprint' }, h('input', { class: 'input', placeholder: 'بحث بالاسم أو الجوال', oninput: e => { F.q = e.target.value.trim(); draw(); } }), sel('g', [['', 'الكل'], ['M', 'رجال'], ['F', 'نساء']]),
+      sel('bus', [['', 'كل الباصات'], ...buses.map(([id, n]) => [String(id), busLabel(n)])]), sel('st', [['', 'كل الحالات'], ['finished', 'أنهى'], ['in_progress', 'جارٍ']]), cnt),
+    h('div', { class: 'card' }, h('h2', { class: 'hide-screen' }, `${CFG.campaign_name} — نتائج مسابقة المعتمرين`), holder));
+  draw();
+}
+
+function winnersChooser(rows) {
+  const real = rows.filter(r => !r.is_test && r.status === 'finished'), skipped = rows.length - real.length;
+  const m = modal([h('h3', null, '🏆 إعلان الفائزين'), h('p', { class: 'muted' }, 'تُعرض الشاشة بملء الشاشة (مناسبة للعرض على شاشة كبيرة).' + (skipped ? ` يُستبعد ${skipped} من التجريبيين أو من لم ينهوا.` : '')),
+    !real.length ? alertEl('warn', 'لا توجد نتائج منتهية لعرضها.') : null,
+    h('button', { class: 'btn gold block', disabled: !real.length, onclick: () => { m.close(); showWinners(real, 'all'); } }, 'الفائزون مجتمعين (أول 3)'),
+    h('button', { class: 'btn block mt', disabled: !real.length, onclick: () => { m.close(); showWinners(real, 'split'); } }, 'منفصلين: رجال ونساء (أول 3 لكل فئة)'),
+    h('button', { class: 'btn ghost block mt', onclick: () => m.close() }, 'إلغاء')]);
+}
+
+function showWinners(real, mode) {
+  const key = e => { if (e.key === 'Escape') close(); };
+  const close = () => { ov.remove(); document.removeEventListener('keydown', key); if (document.fullscreenElement) document.exitFullscreen?.().catch(() => {}); };
+  const ordered = g => real.filter(r => !g || r.gender === g).sort((a, b) => a.rank - b.rank || b.points - a.points || a.total_ms - b.total_ms);
+  const podium = top => {
+    const slot = (p, i) => p ? h('div', { class: `slot s${i + 1}` }, h('div', { class: 'who' }, h('b', null, p.name), h('span', null, busLabel(p.bus_name)), h('div', { class: 'num' }, `${fmtN(p.points)} نقطة`)), h('div', { class: 'blk' }, String(i + 1))) : h('div', { class: 'slot' });
+    return h('div', { class: 'podium' }, slot(top[1], 1), slot(top[0], 0), slot(top[2], 2));
+  };
+  const draw = () => {
+    mount(ov, h('button', { class: 'x', onclick: close, title: 'إغلاق' }, '✕'), h('img', { src: CFG.logo, alt: '', style: { width: '90px', height: '90px', objectFit: 'contain', background: '#fff', borderRadius: '18px', padding: '6px', marginTop: '6px' } }),
+      h('h1', null, 'الفائزون'), h('div', { class: 'cn' }, CFG.campaign_name + ' — مسابقة المعتمرين'),
+      mode === 'all' ? podium(ordered(null).slice(0, 3))
+        : [['M', 'الفائزون — الرجال'], ['F', 'الفائزات — النساء']].map(([g, t]) => h('div', { class: 'grp' }, h('h2', null, t), ordered(g).length ? podium(ordered(g).slice(0, 3)) : h('p', null, 'لا توجد نتائج'))),
+      h('button', { class: 'btn gold mt', onclick: draw }, 'إعادة الحركة'));
+  };
+  const ov = h('div', { class: 'win' }); document.body.append(ov); document.addEventListener('keydown', key);
+  ov.requestFullscreen?.().catch(() => {}); draw();
+}
+
+/* =====================================================================
+   التوجيه والإقلاع
+   ===================================================================== */
+const ADMIN_VIEWS = { home: viewHome, questions: viewQuestions, participants: viewParticipants, buses: viewBuses, results: viewResults, settings: viewSettings };
+
+let firstRoute = true;
+async function route() {
+  adminLeave();
+  if (!firstRoute) { try { await loadConfig(); } catch { /* نكمل بالإعدادات السابقة */ } }   // تحديث الحالة عند كل تنقل
+  firstRoute = false;
+  if ((location.hash || '#/').startsWith('#/admin')) await adminBoot(); else await bootParticipant();
+}
+window.addEventListener('hashchange', route);
+
+(async function main() {
+  try {
+    await initBackend();
+    await loadConfig();
+  } catch (e) {
+    mount($('#app'), h('main', { class: 'wrap' }, h('div', { class: 'card center' }, h('h2', null, 'تعذّر تشغيل التطبيق'), alertEl('err', errMsg(e)),
+      h('p', { class: 'muted small' }, 'تأكد من اتصالك بالإنترنت، ومن ضبط CONFIG بشكل صحيح، ومن تشغيل ملف schema.sql في Supabase.'), h('button', { class: 'btn', onclick: () => location.reload() }, 'إعادة المحاولة'))));
+    return;
+  }
+  await route();
+})();
+</script>
+</body>
+</html>
