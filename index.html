@@ -811,6 +811,13 @@ function createLocalBackend() {
       db.attempts = db.attempts.filter(x => !x.is_test && !gone.has(x.participant_id)); db.participants = db.participants.filter(x => !x.is_test);
       return { ok: true, attempts: a, participants: p };
     },
+    admin_reset_trip() {
+      if (state() === 'open') fail('المسابقة مفتوحة الآن. أنهِها أولاً ثم أعد الضبط لرحلة جديدة');
+      const r = { ok: true, attempts: db.attempts.length, participants: db.participants.length, buses: db.buses.length };
+      db.attempts = []; db.participants = []; db.buses = [];
+      Object.assign(S(), { status: 'draft', results_published: false, test_mode: false, starts_at: null, ends_at: null, closed_at: null });
+      return r;
+    },
     admin_reset_test_attempt({ p_participant_id }) { const n = db.attempts.length; db.attempts = db.attempts.filter(a => !(a.participant_id === p_participant_id && a.is_test)); return { ok: true, deleted: n - db.attempts.length }; },
     admin_regrade() {
       let n = 0;
@@ -1285,8 +1292,33 @@ async function viewSettings() {
         if (!(await confirmDlg({ title: 'إعادة التصحيح؟', text: 'تُعاد معاينة كل الإجابات المسجلة على مفاتيح الإجابة الحالية وتُحدَّث النقاط. استخدمها فقط بعد تصحيح إجابة خاطئة في سؤال.', ok: 'تصحيح' }))) return;
         const r = await rpc('admin_regrade'); toast(`أُعيد تصحيح ${r.regraded} إجابة`, 'ok');
       })))),
+    h('div', { class: 'card', style: { borderColor: 'var(--bad)' } }, h('h3', null, '🔄 رحلة جديدة (إعادة الضبط)'),
+      h('p', { class: 'hint' }, 'تحذف كل المشتركين والباصات والنتائج لتبدأ رحلة جديدة. تبقى الأسئلة وإعدادات الحملة (الاسم والشعار واللون والنقاط والوقت). يُنزَّل ملف Excel احتياطي بالنتائج تلقائياً قبل الحذف، وتعود المسابقة إلى «مسودة».'),
+      h('div', { class: 'row mt' }, btnAct('بدء رحلة جديدة', 'danger', wrapFail(startNewTrip)))),
     save,
   );
+}
+
+/* ---------------------------- رحلة جديدة: تفريغ المشتركين والباصات والنتائج وإبقاء الأسئلة ---------------------------- */
+async function startNewTrip() {
+  const cur = await rpc('admin_get_settings');
+  if (cur.state === 'open') return toast('المسابقة مفتوحة الآن. أنهِها من الصفحة الرئيسية أولاً ثم أعد المحاولة', 'err');
+  const [parts, buses, rows] = await Promise.all([rpc('admin_list_participants'), rpc('admin_list_buses'), rpc('admin_results')]);
+  if (!(await confirmDlg({ title: 'بدء رحلة جديدة؟', ok: 'متابعة', danger: true,
+    text: `سيُحذف نهائياً: ${parts.length} مشترك، ${buses.length} باص، ${rows.length} نتيجة. تبقى الأسئلة وإعدادات الحملة، وتعود المسابقة إلى «مسودة». سيُنزَّل ملف Excel احتياطي قبل الحذف.` }))) return;
+  if (!(await confirmDlg({ title: 'تأكيد نهائي', text: 'هذا الإجراء لا يمكن التراجع عنه.', ok: 'احذف وابدأ رحلة جديدة', danger: true, requireText: 'رحلة جديدة' }))) return;
+  if (parts.length || rows.length) {                       // نسخة احتياطية أولاً؛ إن فشلت لا نحذف شيئاً
+    try {
+      const ST = { none: 'لم يشارك', in_progress: 'جارٍ', finished: 'شارك' }, day = new Date().toLocaleDateString('sv-SE', { timeZone: CONFIG.TIMEZONE });
+      await saveXlsxMulti(`نسخة-احتياطية-رحلة-${day}.xlsx`, [
+        { name: 'النتائج', headers: ['الترتيب', 'الاسم', 'الجوال', 'الجنس', 'الباص', 'النقاط', 'الإجابات الصحيحة', 'الزمن (ثانية)', 'الحالة'],
+          rows: rows.map(r => [r.rank, r.name, phoneShow(r.phone), genderLabel(r.gender), busLabel(r.bus_name), r.points, r.correct, +(r.total_ms / 1000).toFixed(1), r.status === 'finished' ? 'أنهى' : 'جارٍ']) },
+        { name: 'المشتركون', headers: ['الاسم', 'الجوال', 'الجنس', 'الباص', 'الحالة', 'النقاط'],
+          rows: parts.map(p => [p.name, phoneShow(p.phone), genderLabel(p.gender), busLabel(p.bus_name), ST[p.status] || '', p.points ?? '']) }]);
+    } catch (e) { return toast('تعذّر تنزيل النسخة الاحتياطية فلم يُحذف شيء. صدّر النتائج يدوياً من تبويب النتائج ثم أعد المحاولة', 'err'); }
+  }
+  const r = await rpc('admin_reset_trip');
+  await loadConfig(); toast(`تم تفريغ الرحلة: حُذف ${r.participants} مشترك و${r.buses} باص و${r.attempts} محاولة — جاهز لرحلة جديدة`, 'ok'); adminBoot();
 }
 
 /* =====================================================================
@@ -1302,6 +1334,11 @@ async function saveXlsx(name, sheet, headers, rows) {
   const X = await loadXLSX(), ws = X.utils.aoa_to_sheet([headers, ...rows]), wb = X.utils.book_new();
   ws['!cols'] = headers.map(() => ({ wch: 22 })); wb.Workbook = { Views: [{ RTL: true }] };
   X.utils.book_append_sheet(wb, ws, sheet); X.writeFile(wb, name);
+}
+async function saveXlsxMulti(name, sheets) {            // ملف Excel بعدة أوراق: [{name, headers, rows}]
+  const X = await loadXLSX(), wb = X.utils.book_new(); wb.Workbook = { Views: [{ RTL: true }] };
+  sheets.forEach(sh => { const ws = X.utils.aoa_to_sheet([sh.headers, ...sh.rows]); ws['!cols'] = sh.headers.map(() => ({ wch: 22 })); X.utils.book_append_sheet(wb, ws, sh.name); });
+  X.writeFile(wb, name);
 }
 const normHdr = c => toLatinDigits(c).trim().toLowerCase().replace(/[ً-ْـ]/g, '').replace(/[أإآ]/g, 'ا');
 const hdrFind = (hdr, ...keys) => hdr.findIndex(c => keys.some(k => c.includes(normHdr(k))));
